@@ -8,7 +8,7 @@ import Register from '@/pages/Auth/Register'
 const routes: RouteObject[] = [
   {
     path: '/',
-    element: <ProtectedRoute><Home /></ProtectedRoute>,
+    element: <Home />,
   },
   { 
     path: '/forgot-password',
