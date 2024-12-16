@@ -13,12 +13,15 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Eye, EyeOff } from "lucide-react";
+import { registerUser } from "@/helpers/cognito";
+import { toastNotifier } from "@/utils/toastNotifier";
+import { useNavigate } from "react-router-dom";
 
 const formSchema = z
   .object({
-    username: z
+    preferredUsername: z
       .string()
-      .min(3, { message: "Username must be at least 3 characters" }),
+      .min(3, { message: "preferredUsername must be at least 3 characters" }),
     email: z.string().email({ message: "Invalid email address" }),
     password: z
       .string()
@@ -33,20 +36,49 @@ const formSchema = z
 export default function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const Navigate = useNavigate();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
+      preferredUsername: "",
       email: "",
       password: "",
       confirmPassword: "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Handle form submission
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setLoading(true);
+    toastNotifier({
+      message: "Processing your registration...",
+      type: "loading",
+      duration: 3000,
+    });
+
+    try {
+      // Call the registerUser function
+      await registerUser(values.email, values.preferredUsername , values.password);
+
+      toastNotifier({
+        message: "Registration successful! Please check your email for verification.",
+        type: "success",
+        duration: 4000,
+      });
+
+      Navigate("/confirm-email");
+    } catch (error: any) {
+      const errorMessage = error?.message || "An unexpected error occurred. Please try again.";
+
+      toastNotifier({
+        message: errorMessage,
+        type: "error",
+        duration: 4000,
+      });
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -54,10 +86,10 @@ export default function RegisterForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormField
           control={form.control}
-          name="username"
+          name="preferredUsername"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username</FormLabel>
+              <FormLabel>preferredUsername</FormLabel>
               <FormControl>
                 <Input
                   placeholder="johndoe"
@@ -136,7 +168,9 @@ export default function RegisterForm() {
                   />
                   <button
                     type="button"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    onClick={() =>
+                      setShowConfirmPassword(!showConfirmPassword)
+                    }
                     className="absolute inset-y-0 bg-transparent border-0 right-0 pr-3 flex items-center text-gray-700 hover:text-gray-600 dark:text-gray-300 dark:hover:text-gray-100 transition-colors duration-200"
                     aria-label={
                       showConfirmPassword ? "Hide password" : "Show password"
@@ -154,8 +188,8 @@ export default function RegisterForm() {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full">
-          Register
+        <Button type="submit" className="w-full" disabled={loading}>
+          {loading ? "Registering..." : "Register"}
         </Button>
       </form>
     </Form>
