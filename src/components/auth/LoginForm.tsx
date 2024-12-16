@@ -17,7 +17,6 @@ import { loginUser } from "@/helpers/cognito";
 import { toastNotifier } from "@/utils/toastNotifier";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { login } from "@/store/slices/authSlice";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -43,14 +42,13 @@ export default function LoginForm() {
   const onLoginSubmit = async (values: z.infer<typeof loginSchema>) => {
     try {
       setLoading(true);
-      const result = await loginUser(values.email, values.password);
+      const result = await loginUser(values.email, values.password, dispatch);
       if (result) {
         toastNotifier({
           message: "Login successful!",
           type: "success",
           duration: 4000,
         });
-        dispatch(login({ user: {email: 'email' , 'username': 'user'}, accessToken: result.accessToken }));
         Navigate("/");
       } else {
         toastNotifier({
