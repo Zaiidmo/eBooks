@@ -67,7 +67,7 @@ export default function RegisterForm() {
         duration: 4000,
       });
 
-      Navigate("/confirm-email");
+      Navigate("/login");
     } catch (error: any) {
       const errorMessage = error?.message || "An unexpected error occurred. Please try again.";
 
@@ -89,10 +89,10 @@ export default function RegisterForm() {
           name="preferredUsername"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>preferredUsername</FormLabel>
+              <FormLabel>Username</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="johndoe"
+                  placeholder="Username"
                   {...field}
                   className="bg-white/50 dark:bg-gray-800/50"
                 />
