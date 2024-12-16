@@ -56,13 +56,14 @@ export default function Navbar() {
           <div className="flex items-center">
             <a
               href="/"
-              className="text-2xl font-semibold text-gray-800 dark:text-white text-shadow"
+              className="text-2xl font-semibold text-gray-800 dark:text-white text-shadow flex items-center"
             >
               <img
-                src="./vlpha.png"
-                className="w-10 bg-black rounded-full"
+                src="./logo.svg"
+                className="w-8 bg-black"
                 alt="Logo"
               />
+              <span className="ml-2 font-knewave tracking-widest font-extrabold hidden: md:block">eBooks</span>
             </a>
           </div>
           <div className="flex items-center space-x-4">
