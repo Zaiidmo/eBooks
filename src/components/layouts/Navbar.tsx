@@ -1,14 +1,17 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Moon, Sun } from "lucide-react";
+import { LogOut, Moon, Sun } from "lucide-react";
 import { Button } from "../ui/button";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { Link } from "react-router-dom";
+import { logoutUser } from "@/helpers/cognito";
+import { toastNotifier } from "@/utils/toastNotifier";
 
 export default function Navbar() {
   const [darkMode, setDarkMode] = useState(true);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (darkMode) {
@@ -19,6 +22,32 @@ export default function Navbar() {
   }, [darkMode]);
 
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
+
+  const handleLogout = () => {
+    try {
+      const result = logoutUser(dispatch);
+      if (result !== null) {
+        toastNotifier({
+          type: "success",
+          message: "Logged out successfully",
+          duration: 3000,
+        });
+      } else {
+        toastNotifier({
+          type: "error",
+          message: "Error logging out",
+          duration: 3000,
+        });
+      }
+    } catch (error) {
+      toastNotifier({
+        type: "error",
+        message: "Error logging out",
+        duration: 3000,
+      });
+      console.error("Error logging out:", error);
+    }
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 backdrop-filter backdrop-blur-xl bg-gradient-to-b from-white/60 to-white/30 dark:from-gray-900/60 dark:to-gray-900/30 border-b border-gray-200 dark:border-gray-700 shadow-lg z-50">
@@ -37,7 +66,7 @@ export default function Navbar() {
             </a>
           </div>
           <div className="flex items-center space-x-4">
-            {!isAuth && (
+            {!isAuth ? (
               <>
                 <Link to={"login"}>
                   <Button
@@ -56,6 +85,25 @@ export default function Navbar() {
                     Register
                   </Button>
                 </Link>
+              </>
+            ) : (
+              <>
+                <Link to={"dashboard"}>
+                  <Button
+                    variant="outline"
+                    className="text-gray-800 dark:text-white border-gray-300 dark:border-gray-600 hover:bg-white/40 dark:hover:bg-gray-700/40 transition-all duration-300 ease-in-out backdrop-blur-md"
+                  >
+                    Dashboard
+                  </Button>
+                </Link>
+                <Button
+                  onClick={handleLogout}
+                  variant="outline"
+                  className="text-gray-800 dark:text-white border-gray-300 dark:border-gray-600 hover:bg-white/40 dark:hover:bg-gray-700/40 transition-all duration-300 ease-in-out backdrop-blur-md"
+                >
+                  <LogOut />
+                  Logout
+                </Button>
               </>
             )}
 

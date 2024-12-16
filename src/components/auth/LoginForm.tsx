@@ -13,6 +13,10 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Eye, EyeOff } from "lucide-react";
+import { loginUser } from "@/helpers/cognito";
+import { toastNotifier } from "@/utils/toastNotifier";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -23,6 +27,9 @@ const loginSchema = z.object({
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
+  const Navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
 
   const loginForm = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -32,8 +39,41 @@ export default function LoginForm() {
     },
   });
 
-  function onLoginSubmit(values: z.infer<typeof loginSchema>) {
-    console.log(values);
+  const onLoginSubmit = async (values: z.infer<typeof loginSchema>) => {
+    try {
+      setLoading(true);
+      const result = await loginUser(values.email, values.password, dispatch);
+      if (result) {
+        toastNotifier({
+          message: "Login successful!",
+          type: "success",
+          duration: 4000,
+        });
+        Navigate("/");
+      } else {
+        toastNotifier({
+          message: result || "Invalid credentials",
+          type: "error",
+          duration: 4000,
+        });
+      }
+    } catch (error) {
+      toastNotifier({
+        message: "Invalid email or password",
+        type: "error",
+        duration: 4000,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if(loading) {
+    return (
+      <div className="flex justify-center items-center h-fit">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900 dark:border-gray-100"></div>
+      </div>
+    );
   }
 
   return (
