@@ -66,8 +66,9 @@ export default function RegisterForm() {
         type: "success",
         duration: 4000,
       });
+      localStorage.setItem("UserEmail", values.email);
 
-      Navigate("/login");
+      Navigate("/verify-email");
     } catch (error: any) {
       const errorMessage = error?.message || "An unexpected error occurred. Please try again.";
 

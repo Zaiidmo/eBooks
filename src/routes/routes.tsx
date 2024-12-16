@@ -1,9 +1,9 @@
 import { RouteObject } from 'react-router-dom'
 import Home from '../pages/Home'
-import ForgotPassword from '@/pages/Auth/ForgotPassword'
 import { ProtectedRoute, PublicRoute } from '@/guards/auth.guard'
 import Login from '@/pages/Auth/Login'
 import Register from '@/pages/Auth/Register'
+import VerifyEmail from '@/pages/Auth/VerifyEmail'
 
 const routes: RouteObject[] = [
   {
@@ -11,8 +11,8 @@ const routes: RouteObject[] = [
     element: <Home />,
   },
   { 
-    path: '/forgot-password',
-    element: <PublicRoute><ForgotPassword /></PublicRoute>,
+    path: '/verify-email',
+    element: <PublicRoute><VerifyEmail /></PublicRoute>,
   },
   { 
     path: '/login',

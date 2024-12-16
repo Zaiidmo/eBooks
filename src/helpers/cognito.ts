@@ -1,5 +1,6 @@
 import {
   CognitoUserPool,
+  CognitoUser,
   CognitoUserAttribute,
 } from "amazon-cognito-identity-js";
 import {
@@ -14,7 +15,6 @@ const poolData = {
 
 const region = import.meta.env.VITE_AWS_COGNITO_REGION || "";
 
-const userPool = new CognitoUserPool(poolData);
 const cognitoClient = new CognitoIdentityProviderClient({
   region,
   credentials: {
@@ -22,6 +22,9 @@ const cognitoClient = new CognitoIdentityProviderClient({
     secretAccessKey: import.meta.env.VITE_AWS_SECRET_ACCESS_KEY || "",
   },
 });
+
+const userPool = new CognitoUserPool(poolData);
+
 
 /**
  * Register a new user and add them to the 'users' group.
@@ -40,6 +43,7 @@ export const registerUser = async (
         Value: preferredUsername,
       }),
     ];
+
 
     userPool.signUp(email, password, attributeList, [], async (err, result) => {
       if (err) {
@@ -67,10 +71,30 @@ export const registerUser = async (
 
         resolve("Registration successful. Confirm your email.");
       } catch (groupErr) {
-        // If adding to group fails, you might want to handle this
-        // Optionally, you could remove the user if group addition fails
+        // If adding to group fails, handle the error appropriately
         reject(groupErr);
       }
     });
   });
 };
+
+/**
+ * Confirm a user's registration with a confirmation code.
+ */
+export const confirmUser = async (email: string, confirmationCode: string): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const cognitoUser = new CognitoUser({
+      Username: email,
+      Pool: userPool,
+    });
+
+    cognitoUser.confirmRegistration(confirmationCode, true, (err, result) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve("Email confirmed successfully!: " + result);
+    });
+  });
+};
+
