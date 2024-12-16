@@ -1,6 +1,7 @@
 import {
   CognitoUserPool,
   CognitoUser,
+  AuthenticationDetails,
   CognitoUserAttribute,
 } from "amazon-cognito-identity-js";
 import {
@@ -98,3 +99,32 @@ export const confirmUser = async (email: string, confirmationCode: string): Prom
   });
 };
 
+/**
+ * Authenticate a user and return their tokens.
+ */
+export const loginUser = async (email: string, password: string): Promise<{ idToken: string; accessToken: string; refreshToken: string }> => {
+  return new Promise((resolve, reject) => {
+    const authDetails = new AuthenticationDetails({
+      Username: email,
+      Password: password,
+    });
+
+    const cognitoUser = new CognitoUser({
+      Username: email,
+      Pool: userPool,
+    });
+
+    cognitoUser.authenticateUser(authDetails, {
+      onSuccess: (result) => {
+        resolve({
+          idToken: result.getIdToken().getJwtToken(),
+          accessToken: result.getAccessToken().getJwtToken(),
+          refreshToken: result.getRefreshToken().getToken(),
+        });
+      },
+      onFailure: (err) => {
+        reject(err);
+      },
+    });
+  });
+};

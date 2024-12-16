@@ -8,7 +8,7 @@ import VerifyEmail from '@/pages/Auth/VerifyEmail'
 const routes: RouteObject[] = [
   {
     path: '/',
-    element: <Home />,
+    element: <ProtectedRoute><Home /></ProtectedRoute>,
   },
   { 
     path: '/verify-email',

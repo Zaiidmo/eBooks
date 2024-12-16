@@ -8,6 +8,7 @@ import { useRef, useState } from 'react'
 import { confirmUser } from '@/helpers/cognito'
 import { toastNotifier } from '@/utils/toastNotifier'
 import { useNavigate } from 'react-router-dom'
+import { Loader } from 'lucide-react'
 
 
 const otpSchema = z.object({
@@ -63,7 +64,7 @@ export default function OTP() {
 
   return (
   
-        <Form {...otpForm}>
+        !loading ? (<Form {...otpForm}>
           <form onSubmit={otpForm.handleSubmit(onOtpSubmit)} className="space-y-4 flex-col flex items-center ">
             <FormField
               control={otpForm.control}
@@ -96,5 +97,8 @@ export default function OTP() {
             <Button type="submit" className="w-full">Verify Email</Button>
           </form>
         </Form>
+  ) : ( 
+    <Loader className="w-10 h-10" style={{ color: "#2563EB" }} />
+  )
   )
 }
