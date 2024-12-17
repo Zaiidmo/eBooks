@@ -12,7 +12,7 @@ interface BookCardProps {
 
 export function BookCard({ book, onBorrow, onReturn, isLibrarian }: BookCardProps) {
   return (
-    <Card className="h-full flex flex-col">
+    <Card className="h-full flex flex-col bg-gradient-to-b dark:from-gray-800/70 dark:to-gray-900/50">
       <CardHeader>
         <div className="aspect-[2/3] relative mb-4">
           <img
