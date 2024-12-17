@@ -71,10 +71,15 @@ export default function Navbar() {
               to="/"
               className="text-2xl mr-10 font-semibold text-gray-800 dark:text-white text-shadow flex items-center"
             >
-              <BookOpen className="h-8 w-8" />
-              {/* <p className="ml-2 font-knewave tracking-widest font-extrabold hidden md:block">
+              {/* <BookOpen className="h-8 w-8" /> */}
+              <img
+                src="./logo.png"
+                className=" w-7  hidden md:block"
+                alt="Logo"
+              />
+              <p className="ml-2 font-monoton tracking-widest font-extrabold hidden md:block">
                 eBooks
-              </p> */}
+              </p>
             </Link>
           </div>
           <div className="w-fit md:w-full flex justify-between">

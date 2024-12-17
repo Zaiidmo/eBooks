@@ -11,6 +11,8 @@ const mockBooks = [
     description:
       "A story of decadence and excess, Gatsby explores the darker aspects of the American Dream.",
     status: "available",
+    borrowedDate: new Date("2024-03-01"),
+    returnDate: new Date("2024-03-15"),
   },
   {
     id: "2",
@@ -74,7 +76,7 @@ function Books() {
     <>
      <div className="w-screen">
          <div className="flex flex-col items-center justify-center p-8 max-w-screen-xl mx-auto">
-              <h1 className="text-3xl md:text-6xl font-knewave text-left w-full font-bold mb-8">Featured Books</h1>
+              <h1 className="text-3xl md:text-6xl font-poiret text-left w-full font-bold mb-8">Featured Books</h1>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {mockBooks.map((book) => (
                   <BookCard

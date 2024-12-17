@@ -94,7 +94,8 @@ export default {
   		},
 		fontFamily: {
 			"poppins": "Poppins",
-			"knewave": "Knewave",
+			"poiret": "Poiret One",
+			"monoton" : "Monoton",
 		}
   	}
   },
