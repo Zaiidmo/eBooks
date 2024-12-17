@@ -1,4 +1,4 @@
-import { BookCard } from "@/components/cards/BooksCard";
+import { BookCard } from "@/components/books/BooksCard";
 
 const mockBooks = [
   {
