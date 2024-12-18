@@ -101,7 +101,7 @@ export const confirmUser = async (
 export const loginUser = async (
   email: string,
   password: string,
-  dispatch: AppDispatch // Use Redux dispatch
+  dispatch: AppDispatch 
 ): Promise<{ idToken: string; accessToken: string; refreshToken: string }> => {
   return new Promise((resolve, reject) => {
     const authDetails = new AuthenticationDetails({
@@ -120,14 +120,26 @@ export const loginUser = async (
         const accessToken = result.getAccessToken().getJwtToken();
         const refreshToken = result.getRefreshToken().getToken();
 
-        // Dispatch login action with user data
-        const user = {
-          email,
-          username: cognitoUser.getUsername(),
-        };
-        dispatch(login({ user, accessToken }));
+        try {
+          // Fetch user groups using the ID token
+          const decodedToken = JSON.parse(atob(idToken.split(".")[1]));
+          const groups = decodedToken["cognito:groups"] || [];
 
-        resolve({ idToken, accessToken, refreshToken });
+          // Dispatch login action with user data
+          const user = {
+            email,
+            username: cognitoUser.getUsername(),
+            role: groups[0] , 
+          };
+          // console.log("User groups:", groups[0]);
+          
+          dispatch(login({ user, accessToken }));
+
+          resolve({ idToken, accessToken, refreshToken });
+        } catch (err) {
+          console.error("Failed to parse ID token for groups:", err);
+          reject(err);
+        }
       },
       onFailure: (err) => {
         reject(err);
