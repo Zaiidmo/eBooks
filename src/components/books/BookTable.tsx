@@ -1,5 +1,5 @@
 import React from 'react';
-import { Book, PenSquare, Plus, PlusCircle, Trash2 } from 'lucide-react';
+import { Book, PenSquare, PlusCircle, Trash2 } from 'lucide-react';
 import { Button } from '../ui/button';
 import { GlassCard } from '../ui/GlassCard';
 import type { Book as BookType } from '@/types';
