@@ -4,6 +4,8 @@ import { ProtectedRoute, PublicRoute } from '@/guards/auth.guard'
 import Login from '@/pages/Auth/Login'
 import Register from '@/pages/Auth/Register'
 import VerifyEmail from '@/pages/Auth/VerifyEmail'
+import Books from '@/pages/Books'
+import { Dashboard } from '@/pages/Dashboard'
 
 const routes: RouteObject[] = [
   {
@@ -21,6 +23,14 @@ const routes: RouteObject[] = [
   { 
     path: '/register',
     element: <PublicRoute><Register /></PublicRoute>,
+  },
+  {
+    path: '/books',
+    element: <Books  />,
+  },
+  {
+    path: '/dashboard',
+    element: <ProtectedRoute><Dashboard  /></ProtectedRoute>,
   },
 ]
 
