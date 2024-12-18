@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { BookIcon, Calendar, Info, QrCode } from "lucide-react";
+import { BookIcon, Calendar, Info, Pointer, QrCode } from "lucide-react";
 import { GlassModal } from "../modals/GlassModal";
 
 interface BookCardProps {
@@ -70,46 +70,52 @@ export function BookCard({
                   className="object-cover rounded-lg w-full h-full"
                 />
               </div>
-              <div className="space-y-4">
-                <div className="flex items-center gap-2">
-                  <Badge
-                    variant={
-                      book.status === "available" ? "default" : "secondary"
-                    }
-                  >
-                    {book.status}
-                  </Badge>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  {book.description}
-                </p>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2 text-sm">
-                    <BookIcon className="h-4 w-4" />
-                    <span>ISBN: {book.isbn}</span>
+              <div className="flex flex-col justify-between h-full">
+                <div className="space-y-4 ">
+                  <div className="flex items-center gap-2">
+                    <Badge
+                      variant={
+                        book.status === "available" ? "default" : "secondary"
+                      }
+                    >
+                      {book.status}
+                    </Badge>
                   </div>
-                  {book.borrowedDate && (
+                  <p className="text-sm text-muted-foreground">
+                    {book.description}
+                  </p>
+                  <div className="space-y-2">
                     <div className="flex items-center gap-2 text-sm">
-                      <Calendar className="h-4 w-4" />
-                      <span>
-                        Borrowed:{" "}
-                        {new Date(book.borrowedDate).toLocaleDateString()}
-                      </span>
+                      <BookIcon className="h-4 w-4" />
+                      <span>ISBN: {book.isbn}</span>
                     </div>
-                  )}
-                  {book.returnDate && (
+                    {book.borrowedDate && (
+                      <div className="flex items-center gap-2 text-sm">
+                        <Calendar className="h-4 w-4" />
+                        <span>
+                          Borrowed:{" "}
+                          {new Date(book.borrowedDate).toLocaleDateString()}
+                        </span>
+                      </div>
+                    )}
+                    {book.returnDate && (
+                      <div className="flex items-center gap-2 text-sm">
+                        <Calendar className="h-4 w-4" />
+                        <span>
+                          Due: {new Date(book.returnDate).toLocaleDateString()}
+                        </span>
+                      </div>
+                    )}
                     <div className="flex items-center gap-2 text-sm">
-                      <Calendar className="h-4 w-4" />
-                      <span>
-                        Due: {new Date(book.returnDate).toLocaleDateString()}
-                      </span>
+                      <QrCode className="h-4 w-4" />
+                      <span>Location: Section A, Shelf 3</span>
                     </div>
-                  )}
-                  <div className="flex items-center gap-2 text-sm">
-                    <QrCode className="h-4 w-4" />
-                    <span>Location: Section A, Shelf 3</span>
                   </div>
                 </div>
+                <Button
+                  className="mt-4 tracking-widest font-bold uppercase"
+                  onClick={() => onBorrow?.(book.id)}
+                > <Pointer /> Borrow </Button>
               </div>
             </div>
           </GlassModal>
