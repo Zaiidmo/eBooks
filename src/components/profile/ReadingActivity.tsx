@@ -1,5 +1,4 @@
 import React from 'react';
-import { GlassCard } from '../ui/GlassCard';
 import { CurrentBorrows } from './CurrentBorrows';
 import { ReadingHistory } from './ReadingHistory';
 

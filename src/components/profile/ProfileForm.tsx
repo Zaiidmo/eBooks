@@ -39,8 +39,8 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ user, onClose, onSubmi
               </label>
               <input
                 type="text"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                value={formData.preferred_username}
+                onChange={(e) => setFormData({ ...formData, preferred_username: e.target.value })}
                 className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
               />
             </div>

@@ -17,7 +17,7 @@ export interface Book {
 
 export interface Borrower {
   id: string;
-  name: string;
+  preferred_username: string;
   bookId: string;
   borrowDate: string;
   dueDate: string;
@@ -35,7 +35,7 @@ export interface BookFormData {
 
 export interface UserProfile {
   id: string;
-  name: string;
+  preferred_username: string;
   email: string;
   memberSince: string;
 }
