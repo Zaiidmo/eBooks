@@ -7,9 +7,10 @@ import {
 import {
   CognitoIdentityProviderClient,
   AdminAddUserToGroupCommand,
+  GetUserCommand,
 } from "@aws-sdk/client-cognito-identity-provider";
 import { login, logout } from "@/store/slices/authSlice";
-import { AppDispatch } from "@/store/store"; 
+import { AppDispatch } from "@/store/store";
 
 const poolData = {
   UserPoolId: import.meta.env.VITE_AWS_COGNITO_USER_POOL_ID || "",
@@ -39,7 +40,10 @@ export const registerUser = async (
   return new Promise((resolve, reject) => {
     const attributeList = [
       new CognitoUserAttribute({ Name: "email", Value: email }),
-      new CognitoUserAttribute({ Name: "preferred_username", Value: preferredUsername }),
+      new CognitoUserAttribute({
+        Name: "preferred_username",
+        Value: preferredUsername,
+      }),
     ];
 
     userPool.signUp(email, password, attributeList, [], async (err, result) => {
@@ -101,7 +105,7 @@ export const confirmUser = async (
 export const loginUser = async (
   email: string,
   password: string,
-  dispatch: AppDispatch // Use Redux dispatch
+  dispatch: AppDispatch
 ): Promise<{ idToken: string; accessToken: string; refreshToken: string }> => {
   return new Promise((resolve, reject) => {
     const authDetails = new AuthenticationDetails({
@@ -120,14 +124,26 @@ export const loginUser = async (
         const accessToken = result.getAccessToken().getJwtToken();
         const refreshToken = result.getRefreshToken().getToken();
 
-        // Dispatch login action with user data
-        const user = {
-          email,
-          username: cognitoUser.getUsername(),
-        };
-        dispatch(login({ user, accessToken }));
+        try {
+          // Fetch user groups using the ID token
+          const decodedToken = JSON.parse(atob(idToken.split(".")[1]));
+          const groups = decodedToken["cognito:groups"] || [];
 
-        resolve({ idToken, accessToken, refreshToken });
+          // Dispatch login action with user data
+          const user = {
+            email,
+            username: cognitoUser.getUsername(),
+            role: groups[0],
+          };
+          // console.log("User groups:", groups[0]);
+
+          dispatch(login({ user, accessToken }));
+
+          resolve({ idToken, accessToken, refreshToken });
+        } catch (err) {
+          console.error("Failed to parse ID token for groups:", err);
+          reject(err);
+        }
       },
       onFailure: (err) => {
         reject(err);
@@ -151,4 +167,29 @@ export const logoutUser = (dispatch: AppDispatch) => {
 
   // Dispatch logout action
   dispatch(logout());
+};
+
+/**
+ * Get the current authenticated user from Cognito.
+ */
+
+export const fetchUserProfile = async (accessToken: string) => {
+  try {
+    const getUserCommand = new GetUserCommand({
+      AccessToken: accessToken,
+    });
+
+    const response = await cognitoClient.send(getUserCommand);
+
+    // Map attributes to a simpler object
+    const userAttributes = response.UserAttributes?.reduce((acc, attr: any) => {
+      acc[attr.Name] = attr.Value;
+      return acc;
+    }, {} as Record<string, string>);
+
+    return userAttributes; 
+  } catch (error) {
+    console.error("Error fetching user profile:", error);
+    throw error;
+  }
 };

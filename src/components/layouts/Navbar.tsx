@@ -10,8 +10,7 @@ import {
   Menu,
   LogIn,
   DoorOpen,
-  BookA,
-  BookOpen,
+  User,
 } from "lucide-react";
 import { Button } from "../ui/button";
 import { useDispatch, useSelector } from "react-redux";
@@ -35,6 +34,16 @@ export default function Navbar() {
   }, [darkMode]);
 
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
+  const userRole = useSelector((state: RootState) => state.auth.user?.role);
+  const [isManager, setIsManager] = useState(false);
+  console.log("User role:", userRole);
+
+  useEffect(() => {
+    if (userRole === "Manager") {
+
+      setIsManager(true);
+    }
+  }, [isAuth]);
 
   const handleLogout = () => {
     try {
@@ -89,11 +98,19 @@ export default function Navbar() {
               </NavLink>
               {isAuth && (
                 <>
+                  {!isManager && (
+                    <NavLink
+                      to="/dashboard"
+                      icon={<LayoutDashboard className="mr-2 h-4 w-4" />}
+                    >
+                      Dashboard
+                    </NavLink>
+                  )}
                   <NavLink
-                    to="/dashboard"
-                    icon={<LayoutDashboard className="mr-2 h-4 w-4" />}
+                    to="/profile"
+                    icon={<User className="mr-2 h-4 w-4" />}
                   >
-                    Dashboard
+                    Profile
                   </NavLink>
                 </>
               )}
@@ -170,11 +187,21 @@ export default function Navbar() {
                       </>
                       {isAuth && (
                         <>
+                          {isManager && (
+                            <NavLink
+                              to="/dashboard"
+                              icon={
+                                <LayoutDashboard className="mr-2 h-4 w-4" />
+                              }
+                            >
+                              Dashboard
+                            </NavLink>
+                          )}
                           <NavLink
-                            to="/dashboard"
-                            icon={<LayoutDashboard className="mr-2 h-4 w-4" />}
+                            to="/profile"
+                            icon={<User className="mr-2 h-4 w-4" />}
                           >
-                            Dashboard
+                            Profile
                           </NavLink>
                         </>
                       )}
