@@ -32,3 +32,20 @@ export interface BookFormData {
   category: string;
   publishedYear: number;
 }
+
+export interface UserProfile {
+  id: string;
+  name: string;
+  email: string;
+  memberSince: string;
+}
+
+export interface ReadingHistory {
+  id: string;
+  bookTitle: string;
+  author: string;
+  borrowDate: string;
+  returnDate: string;
+  rating?: number;
+  review?: string;
+}

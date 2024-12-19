@@ -6,6 +6,7 @@ import Register from '@/pages/Auth/Register'
 import VerifyEmail from '@/pages/Auth/VerifyEmail'
 import Books from '@/pages/Books'
 import { Dashboard } from '@/pages/Dashboard'
+import { Profile } from '@/pages/Profile'
 
 const routes: RouteObject[] = [
   {
@@ -31,6 +32,10 @@ const routes: RouteObject[] = [
   {
     path: '/dashboard',
     element: <ProtectedRoute><Dashboard  /></ProtectedRoute>,
+  },
+  {
+    path: '/profile',
+    element: <ProtectedRoute><Profile  /></ProtectedRoute>,
   },
 ]
 
