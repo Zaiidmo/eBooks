@@ -13,11 +13,12 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Eye, EyeOff } from "lucide-react";
-import { loginUser } from "@/helpers/cognito";
 import { toastNotifier } from "@/utils/toastNotifier";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { loginUser } from "@/services/auth/login";
 
+// Define validation schema using Zod
 const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
   password: z
@@ -27,7 +28,7 @@ const loginSchema = z.object({
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
-  const Navigate = useNavigate();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
 
@@ -39,27 +40,23 @@ export default function LoginForm() {
     },
   });
 
+  // Handle form submission
   const onLoginSubmit = async (values: z.infer<typeof loginSchema>) => {
     try {
       setLoading(true);
-      const result = await loginUser(values.email, values.password, dispatch);
-      if (result) {
-        toastNotifier({
-          message: "Login successful!",
-          type: "success",
-          duration: 4000,
-        });
-        Navigate("/");
-      } else {
-        toastNotifier({
-          message: result || "Invalid credentials",
-          type: "error",
-          duration: 4000,
-        });
-      }
+      // Call the login service to authenticate the user
+      await loginUser(values.email, values.password, dispatch);
+
+      // Success: navigate and show success message
+      toastNotifier({
+        message: "Login successful!",
+        type: "success",
+        duration: 4000,
+      });
+      navigate("/"); // Redirect to homepage (or wherever needed)
     } catch (error) {
       toastNotifier({
-        message: "Invalid email or password",
+        message: "Invalid credentials or an error occurred.",
         type: "error",
         duration: 4000,
       });
@@ -68,14 +65,13 @@ export default function LoginForm() {
     }
   };
 
-  if(loading) {
+  if (loading) {
     return (
       <div className="flex justify-center items-center h-fit">
         <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900 dark:border-gray-100"></div>
       </div>
     );
   }
-
   return (
     <div className="space-y-6">
       <Form {...loginForm}>
