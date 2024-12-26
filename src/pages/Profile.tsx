@@ -1,20 +1,14 @@
 import UserCard from "@/components/profile/UserCard";
 import { ReadingActivity } from "@/components/profile/ReadingActivity";
-import { useAuth } from "@/hooks/useAuth";
 import { BounceLoader } from "react-spinners";
 
 export const Profile = () => {
-  const { user, loading } = useAuth();
-
-  if (loading) {
-    return (
-      <div className="w-screen h-screen flex justify-center text-red-500 items-center">
-        {" "}
-        <BounceLoader color="#ff0000" />{" "}
-      </div>
-    );
+  const user = {
+    id: "1",
+    username: "John Doe",
+    email: "john.doe@example.com",
+    avatar: "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
   }
-
   if (!user) {
     return (
       <div className="w-screen h-screen flex justify-center text-red-500 items-center">
