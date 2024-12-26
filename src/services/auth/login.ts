@@ -16,36 +16,27 @@ export const loginUser = async (
       },
       body: JSON.stringify({ email, password }),
     });
-    console.log("Login Response:", response);
+
+    console.log("response", response);
     
 
     if (!response.ok) {
-      const error = await response.json();
-      console.error("Error Response:", error);
-      throw new Error(error.message || "Login failed");
+      throw new Error("Failed to authenticate user");
     }
 
-    const data = await response.json();
-
-    if (!data.user) {
-      throw new Error("User data is undefined in the server response");
-    }
+    const { user, idToken, accessToken, refreshToken } = await response.json();
 
     // Dispatch login action with user data
     dispatch(
       login({
-        user: {
-          email: data.user.email,
-          username: data.user.username,
-          role: data.user.role,
-        },
-        accessToken: data.tokens.accessToken,
+        user,
+        accessToken,
       })
     );
 
-    return data;
-  } catch (error: any) {
-    console.error("Login Error:", error);
-    throw new Error(error.message || "An error occurred during login");
+    return { idToken, accessToken, refreshToken };
+  } catch (error) {
+    console.error("Error logging in:", error);
+    throw error;
   }
 };

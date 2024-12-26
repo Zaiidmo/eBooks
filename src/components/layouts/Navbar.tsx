@@ -98,7 +98,7 @@ export default function Navbar() {
               </NavLink>
               {isAuth && (
                 <>
-                  {!isManager && (
+                  {isManager && (
                     <NavLink
                       to="/dashboard"
                       icon={<LayoutDashboard className="mr-2 h-4 w-4" />}
