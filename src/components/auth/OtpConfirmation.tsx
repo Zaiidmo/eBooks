@@ -5,10 +5,10 @@ import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { useRef, useState } from 'react'
-import { confirmUser } from '@/helpers/cognito'
 import { toastNotifier } from '@/utils/toastNotifier'
 import { useNavigate } from 'react-router-dom'
 import { Loader } from 'lucide-react'
+import { confirmUser } from '@/services/auth/confitm'
 
 
 const otpSchema = z.object({

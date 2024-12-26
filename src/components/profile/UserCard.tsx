@@ -9,7 +9,7 @@ interface UserCardProps {
 
 export const UserCard: React.FC<UserCardProps> = ({ user }) => {
   return (
-    <GlassCard className="overflow-hidden h-full">
+    <GlassCard className="overflow-hidden md:h-full py-8 lg:py-0">
       {/* Profile Content */}
       <div className="px-6 pb-6  flex flex-col w-full h-full items-center justify-center ">
         {/* Avatar */}

@@ -24,7 +24,7 @@ export const Profile = () => {
   }
 
   return (
-    <div className="p-8 px-3 md:px-0 flex flex-col lg:flex-row gap-8 max-w-screen-xl mx-auto max-h-[90vh] overflow-y-auto">
+    <div className="p-8 px-3 mx-8 md:px-0 flex flex-col lg:flex-row gap-8 max-w-screen-xl lg:mx-auto max-h-[90vh] overflow-y-auto">
       {/* User Card - 1/3 width */}
       <div className="lg:w-1/3">
         <UserCard user={user} />
