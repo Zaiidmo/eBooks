@@ -17,7 +17,7 @@ export const loginUser = async (
       body: JSON.stringify({ email, password }),
     });
 
-    console.log("response", response);
+    // console.log("response", response);
     
 
     if (!response.ok) {

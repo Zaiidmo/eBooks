@@ -160,7 +160,7 @@ export const logoutUser = (dispatch: AppDispatch) => {
 
   if (currentUser) {
     currentUser.signOut();
-    console.log("User has been logged out successfully.");
+    // console.log("User has been logged out successfully.");
   } else {
     console.warn("No user is currently logged in.");
   }
