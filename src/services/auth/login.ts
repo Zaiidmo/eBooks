@@ -1,16 +1,14 @@
 import { AppDispatch } from "@/store/store";
 import { login } from "@/store/slices/authSlice";
 
-// Define the login function that interacts with the API Gateway
+const API_GATEWAY_URL = import.meta.env.VITE_AWS_API_GATEWAY_URL;
+
 export const loginUser = async (
   email: string,
   password: string,
   dispatch: AppDispatch
-): Promise<{ idToken: string; accessToken: string; refreshToken: string }> => {
+) => {
   try {
-    const API_GATEWAY_URL = import.meta.env.VITE_AWS_API_GATEWAY_URL || "";
-    console.log("API_GATEWAY_URL:", API_GATEWAY_URL);
-
     const response = await fetch(`${API_GATEWAY_URL}/auth/login`, {
       method: "POST",
       headers: {
@@ -18,27 +16,36 @@ export const loginUser = async (
       },
       body: JSON.stringify({ email, password }),
     });
+    console.log("Login Response:", response);
+    
 
     if (!response.ok) {
-      throw new Error("Invalid credentials or something went wrong.");
+      const error = await response.json();
+      console.error("Error Response:", error);
+      throw new Error(error.message || "Login failed");
     }
 
     const data = await response.json();
-    const { idToken, accessToken, refreshToken } = data.tokens;
 
-    const role = data.user.role;
+    if (!data.user) {
+      throw new Error("User data is undefined in the server response");
+    }
 
-    // Dispatch login action with the token data
+    // Dispatch login action with user data
     dispatch(
       login({
-        user: { email, username: email, role: role },
-        accessToken: accessToken,
+        user: {
+          email: data.user.email,
+          username: data.user.username,
+          role: data.user.role,
+        },
+        accessToken: data.tokens.accessToken,
       })
     );
 
-    return { idToken, accessToken, refreshToken };
-  } catch (error) {
-    console.error("Error logging in:", error);
-    throw new Error("Failed to login. Please check your credentials.");
+    return data;
+  } catch (error: any) {
+    console.error("Login Error:", error);
+    throw new Error(error.message || "An error occurred during login");
   }
 };
