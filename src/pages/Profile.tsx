@@ -1,24 +1,25 @@
-
-import UserCard from '@/components/profile/UserCard';
-import { ReadingActivity } from '@/components/profile/ReadingActivity';
-import { Loader } from 'lucide-react';
-import { useAuth } from '@/hooks/useAuth';
+import UserCard from "@/components/profile/UserCard";
+import { ReadingActivity } from "@/components/profile/ReadingActivity";
+import { useAuth } from "@/hooks/useAuth";
+import { BounceLoader } from "react-spinners";
 
 export const Profile = () => {
   const { user, loading } = useAuth();
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader className="w-10 h-10 text-indigo-500" />
+      <div className="w-screen h-screen flex justify-center text-red-500 items-center">
+        {" "}
+        <BounceLoader color="#ff0000" />{" "}
       </div>
     );
   }
 
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-gray-500">Please sign in to view your profile</p>
+      <div className="w-screen h-screen flex justify-center text-red-500 items-center">
+        {" "}
+        <BounceLoader color="#ff0000" />{" "}
       </div>
     );
   }

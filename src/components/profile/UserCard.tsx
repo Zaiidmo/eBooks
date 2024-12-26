@@ -30,7 +30,7 @@ const UserCard = () => {
     }
   }, [accessToken]);
 
-  if (!loading) {
+  if (loading) {
     return <div className='w-full h-full flex justify-center text-red-500 items-center'> <BeatLoader color='#ff0000'/> </div>
   }
 
