@@ -11,7 +11,7 @@ import { Profile } from '@/pages/Profile'
 const routes: RouteObject[] = [
   {
     path: '/',
-    element: <ProtectedRoute><Home /></ProtectedRoute>,
+    element: <Home />,
   },
   { 
     path: '/verify-email',

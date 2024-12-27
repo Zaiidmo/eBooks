@@ -86,20 +86,20 @@ export default function Navbar() {
     <nav className="fixed top-0 left-0 right-0 backdrop-filter backdrop-blur-xl bg-gradient-to-b from-white/60 to-white/30 dark:from-gray-900/60 dark:to-gray-900/30 border-b border-gray-200 dark:border-gray-700 shadow-lg z-50">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center gap-4 justify-between h-16">
-          <div className="flex items-center mr-4">
+          <div className="">
             <Link
-              to="/"
-              className="text-2xl mr-10 font-semibold text-gray-800 dark:text-white text-shadow flex items-center"
-            >
-              {/* <BookOpen className="h-8 w-8" /> */}
+              to="/">
               <img
-                src="./logo.png"
-                className=" w-7  hidden md:block"
+                src="./eBooks-dark.png"
+                className="w-40 md:w-48 dark:hidden"
                 alt="Logo"
               />
-              <p className="ml-2 font-monoton tracking-widest font-extrabold hidden md:block">
-                eBooks
-              </p>
+              <img
+                src="./eBooks-light.png"
+                className="w-40 md:w-48 hidden dark:block"
+                alt="Logo"
+              />
+              
             </Link>
           </div>
           <div className="w-fit md:w-full flex justify-between">
