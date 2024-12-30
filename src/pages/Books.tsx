@@ -1,94 +1,76 @@
 import { BookCard } from "@/components/books/BooksCard";
-
-const mockBooks = [
-  {
-    id: "1",
-    title: "The Great Gatsby",
-    author: "F. Scott Fitzgerald",
-    isbn: "978-0743273565",
-    cover:
-      "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=400",
-    description:
-      "A story of decadence and excess, Gatsby explores the darker aspects of the American Dream.",
-    status: "available",
-    borrowedDate: new Date("2024-03-01"),
-    returnDate: new Date("2024-03-15"),
-  },
-  {
-    id: "2",
-    title: "1984",
-    author: "George Orwell",
-    isbn: "978-0451524935",
-    cover:
-      "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&q=80&w=400",
-    description:
-      "A dystopian social science fiction novel and cautionary tale.",
-    status: "borrowed",
-  },
-  {
-    id: "1",
-    title: "The Great Gatsby",
-    author: "F. Scott Fitzgerald",
-    isbn: "978-0743273565",
-    cover:
-      "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=400",
-    description:
-      "A story of decadence and excess, Gatsby explores the darker aspects of the American Dream.",
-    status: "available",
-  },
-  {
-    id: "2",
-    title: "1984",
-    author: "George Orwell",
-    isbn: "978-0451524935",
-    cover:
-      "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&q=80&w=400",
-    description:
-      "A dystopian social science fiction novel and cautionary tale.",
-    status: "borrowed",
-  },
-  {
-    id: "1",
-    title: "The Great Gatsby",
-    author: "F. Scott Fitzgerald",
-    isbn: "978-0743273565",
-    cover:
-      "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=400",
-    description:
-      "A story of decadence and excess, Gatsby explores the darker aspects of the American Dream.",
-    status: "available",
-  },
-  {
-    id: "2",
-    title: "1984",
-    author: "George Orwell",
-    isbn: "978-0451524935",
-    cover:
-      "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&q=80&w=400",
-    description:
-      "A dystopian social science fiction novel and cautionary tale.",
-    status: "borrowed",
-  },
-] as const;
+import { getAllBooks } from "@/services/books/getAllBooks";
+import { useEffect, useState } from "react";
+import { BeatLoader } from "react-spinners";
+import { Book } from "@/types";
 
 function Books() {
+  const [loading, setLoading] = useState(false);
+  const [books, setBooks] = useState<Book[]>([]);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchBooks = async () => {
+      setLoading(true);
+      try {
+        const data = await getAllBooks();
+        console.log('Fetched data:', data);
+        
+        if (Array.isArray(data)) {
+          setBooks(data);
+        } else {
+          console.error('Unexpected data format:', data);
+          throw new Error('Received invalid data format from server');
+        }
+      } catch (err: unknown) {
+        const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+        console.error('Error details:', err);
+        setError(errorMessage);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBooks();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        <BeatLoader color="#ff0000" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="w-full h-full flex justify-center items-center text-red-500">
+        <p>Failed to load books: {error}</p>
+      </div>
+    );
+  }
+
   return (
-    <>
-     <div className="w-screen mt-16 h-full">
-         <div className="flex flex-col items-center justify-center p-8 max-w-screen-xl mx-auto">
-              <h1 className="text-3xl md:text-6xl font-poiret text-left w-full font-bold mb-8">Featured Books</h1>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {mockBooks.map((book) => (
-                  <BookCard
-                    key={book.id}
-                    book={book}
-                    onBorrow={(id) => console.log("Borrow book:", id)}
-                  />
-                ))}
-              </div>
-         </div>
-     </div>
-    </>
+    <div className="w-screen mt-16 h-full">
+      <div className="flex flex-col items-center justify-center p-8 max-w-screen-xl mx-auto">
+        <h1 className="text-3xl md:text-6xl font-poiret text-left w-full font-bold mb-8">
+          Featured Books
+        </h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {books && books.length > 0 ? (
+            books.map((book) => (
+              <BookCard
+                key={book.book_id}
+                book={book}
+                onBorrow={(id) => console.log("Borrow book:", id)}
+              />
+            ))
+          ) : (
+            <p>No books available</p>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }
 

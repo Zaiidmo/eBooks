@@ -1,18 +1,20 @@
 export interface Book {
-  id: string;
+  book_id: string;
   title: string;
   author: string;
-  isbn: string;
+  category: string;
+  quantity: number;
   cover: string;
+  isbn?: string;
   description: string;
-  status: "available" | "borrowed";
-  borrowedBy?: string;
+  price: number;
   borrowedDate?: Date;
   returnDate?: Date;
-  totalCopies?: number;
-  available?: number;
-  category?: string;
-  publishedYear?: number;
+}
+
+export interface BooksResponse {
+  books: Book[];
+  totalBooks: number;
 }
 
 export interface Borrower {
@@ -22,15 +24,6 @@ export interface Borrower {
   borrowDate: string;
   dueDate: string;
   status: "on_time" | "overdue" | "returned";
-}
-
-export interface BookFormData {
-  title: string;
-  author: string;
-  isbn: string;
-  totalCopies: number;
-  category: string;
-  publishedYear: number;
 }
 
 export interface UserProfile {
@@ -48,4 +41,21 @@ export interface ReadingHistory {
   returnDate: string;
   rating?: number;
   review?: string;
+}
+
+export interface BookFormData {
+  title: string;
+  author: string;
+  description: string;
+  category: string;
+  isbn: string;
+  quantity: number;
+  price: number;
+  cover: FileList;
+}
+
+export interface ApiResponse<T> {
+  ok: boolean;
+  data?: T;
+  error?: string;
 }
