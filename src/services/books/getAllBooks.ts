@@ -1,10 +1,12 @@
-const API_GATEWAY_URL = import.meta.env.VITE_AWS_API_GATEWAY_URL;
-const localUrl = 'http://localhost:3000';
+import { Book } from "@/types";
 
-// src/services/books/getAllBooks.ts
-export const getAllBooks = async () => {
+const API_GATEWAY_URL = import.meta.env.VITE_AWS_API_GATEWAY_URL;
+const localUrl = "http://localhost:3000";
+
+export const getAllBooks = async ():Promise<Book[]> => {
   try {
-    const response = await fetch(`${API_GATEWAY_URL}/books`, {
+
+    const response = await fetch(`${localUrl}/books`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -12,24 +14,22 @@ export const getAllBooks = async () => {
       },
     });
 
-    console.log('response:', response.body);
-    
+    console.log('Response status:', response);
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    // Parse the response JSON
-    const responseData = await response.json();
-    console.log('Response Data:', responseData);
+    const data = await response.json();
+    console.log('Parsed data:', data);
 
-    // Return the `books` field
-    return responseData.books;
-  } catch (error: any) {
-    console.error('Detailed error:', {
-      message: error.message,
-      stack: error.stack,
-      name: error.name,
-    });
-    throw error;
+    if (!data.books || !Array.isArray(data.books)) {
+      throw new Error('Invalid data format: Expected an array in `data.books`');
+    }
+
+    return data.books;
+  } catch (error) {
+    console.error('Error fetching books:', error);
+    throw error instanceof Error ? error : new Error('Unknown error occurred');
   }
 };

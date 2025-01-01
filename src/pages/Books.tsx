@@ -14,17 +14,13 @@ function Books() {
       setLoading(true);
       try {
         const data = await getAllBooks();
-        console.log('Fetched data:', data);
-        
-        if (Array.isArray(data)) {
-          setBooks(data);
-        } else {
-          console.error('Unexpected data format:', data);
-          throw new Error('Received invalid data format from server');
-        }
-      } catch (err: unknown) {
-        const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
-        console.error('Error details:', err);
+        console.log("Books:", data);
+
+        setBooks(data);
+      } catch (err: any) {
+        const errorMessage =
+          err instanceof Error ? err.message : "Unknown error occurred";
+        console.error("Error details:", err);
         setError(errorMessage);
       } finally {
         setLoading(false);
