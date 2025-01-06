@@ -30,7 +30,10 @@ export const loginUser = async (
     dispatch(
       login({
         user,
-        accessToken,
+        tokens : {
+          idToken: idToken,
+          accessToken: accessToken
+        }
       })
     );
 
