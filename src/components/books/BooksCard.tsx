@@ -7,8 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { BookIcon, Calendar, Info, Pointer, QrCode } from "lucide-react";
+import { BookIcon, Info, Pointer, QrCode } from "lucide-react";
 import { GlassModal } from "../modals/GlassModal";
 
 interface BookCardProps {
@@ -44,7 +43,7 @@ export function BookCard({
       </CardContent>
       <CardFooter className="flex justify-end items-center">
         {isLibrarian ? (
-          <Button variant="outline" onClick={() => onReturn?.(book.id)}>
+          <Button variant="outline" onClick={() => onReturn?.(book.book_id)}>
             Manage
           </Button>
         ) : (
@@ -52,7 +51,7 @@ export function BookCard({
             trigger={
               <Button
                 className="p-1 rounded-full h-fit"
-                onClick={() => onBorrow?.(book.id)}
+                onClick={() => onBorrow?.(book.book_id)}
               >
                 <Info className="h-4 w-4" />
               </Button>
@@ -73,13 +72,13 @@ export function BookCard({
               <div className="flex flex-col justify-between h-full">
                 <div className="space-y-4 ">
                   <div className="flex items-center gap-2">
-                    <Badge
+                    {/* <Badge
                       variant={
                         book.status === "available" ? "default" : "secondary"
                       }
                     >
                       {book.status}
-                    </Badge>
+                    </Badge> */}
                   </div>
                   <p className="text-sm text-muted-foreground">
                     {book.description}
@@ -89,7 +88,7 @@ export function BookCard({
                       <BookIcon className="h-4 w-4" />
                       <span>ISBN: {book.isbn}</span>
                     </div>
-                    {book.borrowedDate && (
+                    {/* {book.borrowedDate && (
                       <div className="flex items-center gap-2 text-sm">
                         <Calendar className="h-4 w-4" />
                         <span>
@@ -105,7 +104,7 @@ export function BookCard({
                           Due: {new Date(book.returnDate).toLocaleDateString()}
                         </span>
                       </div>
-                    )}
+                    )} */}
                     <div className="flex items-center gap-2 text-sm">
                       <QrCode className="h-4 w-4" />
                       <span>Location: Section A, Shelf 3</span>
@@ -114,7 +113,7 @@ export function BookCard({
                 </div>
                 <Button
                   className="mt-4 tracking-widest font-bold uppercase"
-                  onClick={() => onBorrow?.(book.id)}
+                  onClick={() => onBorrow?.(book.book_id)}
                 > <Pointer /> Borrow </Button>
               </div>
             </div>

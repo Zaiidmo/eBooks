@@ -11,14 +11,15 @@ import {
   LogIn,
   DoorOpen,
   User,
+  Loader,
 } from "lucide-react";
 import { Button } from "../ui/button";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { Link } from "react-router-dom";
-import { logoutUser } from "@/helpers/cognito";
 import { toastNotifier } from "@/utils/toastNotifier";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { logoutUser } from "@/services/auth/logout";
 
 export default function Navbar() {
   const [darkMode, setDarkMode] = useState(true);
@@ -35,8 +36,10 @@ export default function Navbar() {
 
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
   const userRole = useSelector((state: RootState) => state.auth.user?.role);
+  const accessToken = useSelector((state: RootState) => state.auth.token) || "";
   const [isManager, setIsManager] = useState(false);
-  console.log("User role:", userRole);
+  const [loading, setLoading] = useState(false);
+  // console.log("User role:", userRole);
 
   useEffect(() => {
     if (userRole === "Manager") {
@@ -45,9 +48,16 @@ export default function Navbar() {
     }
   }, [isAuth]);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    setLoading(true);
+    toastNotifier({
+      message: "Loging out...",
+      type: "loading",
+      duration: 1000,
+    });
+
     try {
-      const result = logoutUser(dispatch);
+      const result = await logoutUser(accessToken , dispatch);
       if (result !== null) {
         toastNotifier({
           type: "success",
@@ -70,25 +80,26 @@ export default function Navbar() {
       console.error("Error logging out:", error);
     }
   };
+  {loading && <Loader />}
 
   return (
     <nav className="fixed top-0 left-0 right-0 backdrop-filter backdrop-blur-xl bg-gradient-to-b from-white/60 to-white/30 dark:from-gray-900/60 dark:to-gray-900/30 border-b border-gray-200 dark:border-gray-700 shadow-lg z-50">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center gap-4 justify-between h-16">
-          <div className="flex items-center mr-4">
+          <div className="">
             <Link
-              to="/"
-              className="text-2xl mr-10 font-semibold text-gray-800 dark:text-white text-shadow flex items-center"
-            >
-              {/* <BookOpen className="h-8 w-8" /> */}
+              to="/">
               <img
-                src="./logo.png"
-                className=" w-7  hidden md:block"
+                src="./eBooks-dark.png"
+                className="w-40 md:w-48 dark:hidden"
                 alt="Logo"
               />
-              <p className="ml-2 font-monoton tracking-widest font-extrabold hidden md:block">
-                eBooks
-              </p>
+              <img
+                src="./eBooks-light.png"
+                className="w-40 md:w-48 hidden dark:block"
+                alt="Logo"
+              />
+              
             </Link>
           </div>
           <div className="w-fit md:w-full flex justify-between">
@@ -98,7 +109,7 @@ export default function Navbar() {
               </NavLink>
               {isAuth && (
                 <>
-                  {!isManager && (
+                  {isManager && (
                     <NavLink
                       to="/dashboard"
                       icon={<LayoutDashboard className="mr-2 h-4 w-4" />}

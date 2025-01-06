@@ -7,7 +7,7 @@ import type { Book, Borrower } from "@/types";
 // Sample data - In a real app, this would come from an API
 const sampleBooks: Book[] = [
   {
-    id: "1",
+    book_id: "1",
     title: "The Great Gatsby",
     author: "F. Scott Fitzgerald",
     isbn: "978-0743273565",
@@ -15,12 +15,14 @@ const sampleBooks: Book[] = [
       "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=400",
     description:
       "A story of decadence and excess, Gatsby explores the darker aspects of the American Dream.",
-    status: "available",
     borrowedDate: new Date("2024-03-01"),
+    category: "Fiction",
+    quantity: 3,
+    price : 15.99,
     returnDate: new Date("2024-03-15"),
   },
   {
-    id: "2",
+    book_id: "2",
     title: "1984",
     author: "George Orwell",
     isbn: "978-0451524935",
@@ -28,28 +30,13 @@ const sampleBooks: Book[] = [
       "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&q=80&w=400",
     description:
       "A dystopian social science fiction novel and cautionary tale.",
-    status: "borrowed",
+    category: "Science Fiction",
+    quantity: 5,
+    price : 10.99,
   },
 ];
 
-const sampleBorrowers: Borrower[] = [
-  {
-    id: "1",
-    name: "John Smith",
-    bookId: "1",
-    borrowDate: "2024-02-15",
-    dueDate: "2024-03-15",
-    status: "on_time",
-  },
-  {
-    id: "2",
-    name: "Emma Wilson",
-    bookId: "2",
-    borrowDate: "2024-02-01",
-    dueDate: "2024-03-01",
-    status: "overdue",
-  },
-];
+
 
 const stats = [
   {
@@ -96,7 +83,7 @@ export const Dashboard = () => {
           onDelete={handleDeleteBook}
         />
 
-        <BorrowedBooks borrowers={sampleBorrowers} />
+        {/* <BorrowedBooks borrowers={sampleBorrowers} /> */}
       </div>
     </div>
   );

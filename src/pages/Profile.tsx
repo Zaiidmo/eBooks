@@ -1,33 +1,28 @@
-
-import { UserCard } from '@/components/profile/UserCard';
-import { ReadingActivity } from '@/components/profile/ReadingActivity';
-import { Loader } from 'lucide-react';
-import { useAuth } from '@/hooks/useAuth';
+import UserCard from "@/components/profile/UserCard";
+import { ReadingActivity } from "@/components/profile/ReadingActivity";
+import { BounceLoader } from "react-spinners";
 
 export const Profile = () => {
-  const { user, loading } = useAuth();
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader className="w-10 h-10 text-indigo-500" />
-      </div>
-    );
+  const user = {
+    id: "1",
+    username: "John Doe",
+    email: "john.doe@example.com",
+    avatar: "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
   }
-
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-gray-500">Please sign in to view your profile</p>
+      <div className="w-screen h-screen flex justify-center text-red-500 items-center">
+        {" "}
+        <BounceLoader color="#ff0000" />{" "}
       </div>
     );
   }
 
   return (
-    <div className="p-8 px-3 md:px-0 flex flex-col lg:flex-row gap-8 max-w-screen-xl mx-auto max-h-[90vh] overflow-y-auto">
+    <div className="p-8 mt-10 px-3 mx-8 md:px-0 flex flex-col lg:flex-row gap-8 max-w-screen-xl lg:mx-auto max-h-[95vh] overflow-y-auto">
       {/* User Card - 1/3 width */}
       <div className="lg:w-1/3">
-        <UserCard user={user} />
+        <UserCard />
       </div>
 
       {/* Reading Activity - 2/3 width */}

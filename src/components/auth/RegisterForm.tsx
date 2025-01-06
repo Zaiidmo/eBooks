@@ -13,9 +13,9 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Eye, EyeOff } from "lucide-react";
-import { registerUser } from "@/helpers/cognito";
 import { toastNotifier } from "@/utils/toastNotifier";
 import { useNavigate } from "react-router-dom";
+import { registerUser } from "@/services/auth/register";
 
 const formSchema = z
   .object({
