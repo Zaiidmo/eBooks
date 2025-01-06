@@ -55,6 +55,7 @@ const stats = [
   { label: "Overdue", value: "8", icon: AlertCircle, color: "bg-red-500/80" },
 ];
 
+
 export const Dashboard = () => {
   const handleEditBook = (book: Book) => {
     console.log("Edit book:", book);
@@ -77,11 +78,7 @@ export const Dashboard = () => {
           ))}
         </div>
 
-        <BookTable
-          books={sampleBooks}
-          onEdit={handleEditBook}
-          onDelete={handleDeleteBook}
-        />
+        <BookTable/>
 
         {/* <BorrowedBooks borrowers={sampleBorrowers} /> */}
       </div>

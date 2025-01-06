@@ -1,22 +1,63 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Book, PenSquare, PlusCircle, Trash2 } from "lucide-react";
 import { Button } from "../ui/button";
 import { GlassCard } from "../ui/GlassCard";
 import type { Book as BookType } from "@/types";
 import { GlassModal } from "../modals/GlassModal";
 import { AddBookForm } from "./AddBookForm";
+import { getAllBooks } from "@/services/books/getAllBooks";
+import { BeatLoader } from "react-spinners";
 
-interface BookTableProps {
-  books: BookType[];
-  onEdit: (book: BookType) => void;
-  onDelete: (bookId: string) => void;
+
+
+const handleDeleteBook = (bookId: string) => {
+  console.log("Delete book:", bookId);
+}
+const handleEditBook = (bookId: string) => {
+  console.log("Edit book:", bookId);
 }
 
-export const BookTable: React.FC<BookTableProps> = ({
-  books,
-  onEdit,
-  onDelete,
-}) => {
+export const BookTable = () => {
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
+  const [books, setBooks] = React.useState<BookType[]>([]);
+  useEffect(() => {
+    const fetchBooks = async () => {
+      setLoading(true);
+      try {
+        const data = await getAllBooks();
+        console.log("Books:", data);
+
+        setBooks(data);
+      } catch (err: any) {
+        const errorMessage =
+          err instanceof Error ? err.message : "Unknown error occurred";
+        console.error("Error details:", err);
+        setError(errorMessage);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBooks();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        <BeatLoader color="#ff0000" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="w-full h-full flex justify-center items-center text-red-500">
+        <p>Failed to load books: {error}</p>
+      </div>
+    );
+  }
+
   return (
     <GlassCard className="overflow-hidden">
       <div className="p-6 border-b border-white/20 flex justify-between items-center">
@@ -36,11 +77,7 @@ export const BookTable: React.FC<BookTableProps> = ({
             </Button>
           }
         >
-          <AddBookForm
-            onSubmit={(data) => {
-              console.log(data);
-            }}
-          />
+          <AddBookForm />
         </GlassModal>
       </div>
       <div className="overflow-x-auto">
@@ -82,19 +119,19 @@ export const BookTable: React.FC<BookTableProps> = ({
                   {book.category}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  {/* <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                    book.available > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                  <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                    book.quantity > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                   }`}>
-                    {book.available}/{book.totalCopies}
-                  </span> */}
+                    {book.quantity} {book.quantity > 0 ? 'Available' : 'Out of Stock'}
+                  </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                   <div className="flex gap-2">
-                    <Button onClick={() => onEdit(book)}>
+                    <Button onClick={() => handleEditBook(book.book_id)}>
                       <PenSquare className="w-4 h-4" />
                       Edit
                     </Button>
-                    <Button onClick={() => onDelete(book.book_id)}>
+                    <Button onClick={() => handleDeleteBook(book.book_id)}>
                       <Trash2 className="w-4 h-4" />
                       Delete
                     </Button>
