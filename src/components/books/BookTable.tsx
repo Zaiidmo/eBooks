@@ -122,7 +122,7 @@ export const BookTable = () => {
                   <span className={`px-2 py-1 text-xs font-medium rounded-full ${
                     book.quantity > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                   }`}>
-                    {book.quantity} {book.quantity > 0 ? 'Available' : 'Out of Stock'}
+                  {book.quantity > 0 ?   `${book.quantity} Available` : 'Out of Stock'}
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
