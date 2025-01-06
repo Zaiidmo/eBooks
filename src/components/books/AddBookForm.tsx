@@ -21,6 +21,31 @@ export function AddBookForm() {
   const onSubmit: SubmitHandler<BookFormData> = async (data) => {
     setIsSubmitting(true);
     const formData = new FormData();
+    
+    // Add file validation
+    if (data.cover[0]) {
+      const file = data.cover[0];
+      // console.log("File details:", {
+      //   name: file.name,
+      //   type: file.type,
+      //   size: file.size
+      // });
+      
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        toastNotifier({
+          message: "Please upload an image file",
+          type: "error",
+          duration: 3000,
+        });
+        setIsSubmitting(false);
+        return;
+      }
+      
+      formData.append("cover", file);
+    }
+  
+    // Add other fields
     formData.append("title", data.title);
     formData.append("author", data.author);
     formData.append("description", data.description);
@@ -28,12 +53,9 @@ export function AddBookForm() {
     formData.append("quantity", data.quantity.toString());
     formData.append("price", data.price.toString());
     formData.append("isbn", data.isbn);
-    if (data.cover[0]) {
-      formData.append("cover", data.cover[0]);
-    }
 
     try {
-      const response = await createNewBook(formData);
+       await createNewBook(formData);
       // console.log(response);
 
       toastNotifier({

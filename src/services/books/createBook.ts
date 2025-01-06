@@ -7,6 +7,9 @@ export const createNewBook = async (formData: FormData ) => {
   try {
     const response = await fetch(`${API_GATEWAY_URL}/books`, {
       method: "POST",
+      headers: {
+        'Accept': 'application/json',
+      },
       body: formData,
     });
 
