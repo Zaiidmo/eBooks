@@ -5,20 +5,23 @@ const API_GATEWAY_URL = import.meta.env.VITE_AWS_API_GATEWAY_URL;
 // src/services/books/getAllBooks.ts
 export const createNewBook = async (formData: FormData ) => {
   try {
+    const storage = JSON.parse(localStorage.getItem('auth') || "") ;
+    const token = storage?.tokens?.idToken;
     const response = await fetch(`${API_GATEWAY_URL}/books`, {
       method: "POST",
       headers: {
         'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`,
       },
       body: formData,
     });
 
-    console.log(
-      "Response status:",
-      response.status,
-      "Response headers:",
-      response.headers
-    );
+    // console.log(
+    //   "Response status:",
+    //   response.status,
+    //   "Response headers:",
+    //   response.headers
+    // );
 
     if (!response.ok) {
       const errorResponse = await response.text();
