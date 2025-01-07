@@ -9,6 +9,8 @@ interface ReadingHistoryProps {
 
 export const ReadingHistory: React.FC<ReadingHistoryProps> = ({ userId }) => {
   // Mock data - Replace with API call using userId
+  console.log('User ID:', userId);
+  
   const history: ReadingHistoryType[] = [
     {
       id: '1',

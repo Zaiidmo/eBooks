@@ -36,8 +36,6 @@ export const Dashboard = () => {
         </div>
 
         <BookTable/>
-
-        {/* <BorrowedBooks borrowers={sampleBorrowers} /> */}
       </div>
     </div>
   );

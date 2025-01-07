@@ -2,11 +2,14 @@ import { ChevronRight } from 'lucide-react';
 import { BookCard } from '../books/BooksCard';
 
 interface Book {
-  id: number;
+  book_id: string;
   title: string;
   author: string;
   cover: string;
   isbn: string;
+  category: string;
+  quantity: number;
+  price: number;
   description: string;
   borrowedDate: Date;
   returnDate: Date;
@@ -30,7 +33,7 @@ const BookSection = ({ title, books }: BookSectionProps) => {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {books.map((book) => (
-            <BookCard key={book.id} book={book} />
+            <BookCard key={book.book_id} book={book} />
           ))}
         </div>
       </div>

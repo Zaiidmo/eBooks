@@ -5,7 +5,7 @@ import Hero from "@/components/home/HeroSection";
 function Home() {
   const Books = [
     {
-      id: "1",
+      book_id: "1",
       title: "The Great Gatsby",
       author: "F. Scott Fitzgerald",
       isbn: "978-0743273565",
@@ -13,9 +13,12 @@ function Home() {
         "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=400",
       description:
         "A story of decadence and excess, Gatsby explores the darker aspects of the American Dream.",
-      status: "available",
-      borrowedDate: new Date("2024-03-01"),
-      returnDate: new Date("2024-03-15"),
+      category: "Fiction",
+      quantity: 10,
+      price: 20,
+      borrowedDate: new Date(),
+      returnDate: new Date(),
+      status: "AVAILABLE"
     }
   ];
 

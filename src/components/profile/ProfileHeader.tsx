@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mail, Phone, MapPin, Edit } from 'lucide-react';
+import { Mail, Edit } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import type { UserProfile } from '@/types';
 
@@ -26,12 +26,12 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user, onEdit }) =>
         <div className="absolute -top-16">
           <img
             className="w-32 h-32 rounded-full border-4 border-white shadow-lg"
-            src={user.avatar}
-            alt={user.name}
+            src={user.id}
+            alt={user.preferred_username}
           />
         </div>
         <div className="pt-20 pb-8">
-          <h1 className="text-2xl font-bold text-gray-900">{user.name}</h1>
+          <h1 className="text-2xl font-bold text-gray-900">{user.preferred_username}</h1>
           <p className="text-gray-600">Member since {user.memberSince}</p>
           
           <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -39,14 +39,14 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user, onEdit }) =>
               <Mail className="w-5 h-5 text-gray-400" />
               <span>{user.email}</span>
             </div>
-            <div className="flex items-center gap-3 text-gray-700">
+            {/* <div className="flex items-center gap-3 text-gray-700">
               <Phone className="w-5 h-5 text-gray-400" />
               <span>{user.phone}</span>
             </div>
             <div className="flex items-center gap-3 text-gray-700">
               <MapPin className="w-5 h-5 text-gray-400" />
               <span>{user.location}</span>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
