@@ -7,9 +7,8 @@ export interface Book {
   cover: string;
   isbn?: string;
   description: string;
+  borrowedBy?: [Borrower];
   price: number;
-  borrowedDate?: Date;
-  returnDate?: Date;
 }
 
 export interface BooksResponse {
@@ -18,12 +17,11 @@ export interface BooksResponse {
 }
 
 export interface Borrower {
-  id: string;
-  preferred_username: string;
-  bookId: string;
+  userId: string;
   borrowDate: string;
-  dueDate: string;
-  status: "on_time" | "overdue" | "returned";
+  expectedReturnDate: string;
+  actualReturnDate?: string;
+  status: 'ACTIVE' | 'RETURNED' | 'OVERDUE' | 'NOT BORROWED';
 }
 
 export interface UserProfile {

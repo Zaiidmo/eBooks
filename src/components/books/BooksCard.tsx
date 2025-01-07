@@ -7,7 +7,15 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { BookIcon, Info, Pointer, QrCode } from "lucide-react";
+import {
+  BookIcon,
+  Calendar,
+  Calendar1Icon,
+  ChartArea,
+  Info,
+  Pointer,
+  QrCode,
+} from "lucide-react";
 import { GlassModal } from "../modals/GlassModal";
 
 interface BookCardProps {
@@ -44,22 +52,23 @@ export function BookCard({
       <CardFooter className="flex justify-end items-center">
         {isLibrarian ? (
           <Button variant="outline" onClick={() => onReturn?.(book.book_id)}>
-            Manage
+            Return
           </Button>
         ) : (
           <GlassModal
             trigger={
-              <Button
-                className="p-1 rounded-full h-fit"
-                onClick={() => onBorrow?.(book.book_id)}
-              >
+              <Button className="p-1 rounded-full h-fit">
                 <Info className="h-4 w-4" />
               </Button>
             }
           >
             <div className="flex flex-col space-y-1.5 text-center sm:text-left">
-              <h1 className="text-2xl font-semibold leading-none tracking-tight">{book.title}</h1>
-              <h4 className="text-sm text-muted-foreground">by {book.author}</h4>
+              <h1 className="text-2xl font-semibold leading-none tracking-tight">
+                {book.title}
+              </h1>
+              <h4 className="text-sm text-muted-foreground">
+                by {book.author}
+              </h4>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="aspect-[2/3] relative">
@@ -88,23 +97,32 @@ export function BookCard({
                       <BookIcon className="h-4 w-4" />
                       <span>ISBN: {book.isbn}</span>
                     </div>
-                    {/* {book.borrowedDate && (
-                      <div className="flex items-center gap-2 text-sm">
-                        <Calendar className="h-4 w-4" />
-                        <span>
-                          Borrowed:{" "}
-                          {new Date(book.borrowedDate).toLocaleDateString()}
-                        </span>
-                      </div>
+                    {book.borrowedBy && (
+                      <>
+                        <div className="flex items-center gap-2 text-sm">
+                          <Calendar1Icon className="h-4 w-4" />
+                          <span>
+                            Borrow Date:{" "}
+                            {new Date(
+                              book.borrowedBy[0].borrowDate
+                            ).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm">
+                          <Calendar className="h-4 w-4" />
+                          <span>
+                            Return Date:{" "}
+                            {new Date(
+                              book.borrowedBy[0].expectedReturnDate
+                            ).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm">
+                          <ChartArea className="h-4 w-4" />
+                          <span>Status: {book.borrowedBy[0].status}</span>
+                        </div>
+                      </>
                     )}
-                    {book.returnDate && (
-                      <div className="flex items-center gap-2 text-sm">
-                        <Calendar className="h-4 w-4" />
-                        <span>
-                          Due: {new Date(book.returnDate).toLocaleDateString()}
-                        </span>
-                      </div>
-                    )} */}
                     <div className="flex items-center gap-2 text-sm">
                       <QrCode className="h-4 w-4" />
                       <span>Location: Section A, Shelf 3</span>
@@ -114,7 +132,10 @@ export function BookCard({
                 <Button
                   className="mt-4 tracking-widest font-bold uppercase"
                   onClick={() => onBorrow?.(book.book_id)}
-                > <Pointer /> Borrow </Button>
+                >
+                  {" "}
+                  <Pointer /> Borrow{" "}
+                </Button>
               </div>
             </div>
           </GlassModal>

@@ -1,11 +1,12 @@
 import { Book } from "@/types";
 
 const API_GATEWAY_URL = import.meta.env.VITE_AWS_API_GATEWAY_URL;
+const API_KEY = "http://localhost:3000";
 
 export const getAllBooks = async ():Promise<Book[]> => {
   try {
 
-    const response = await fetch(`${API_GATEWAY_URL}/books`, {
+    const response = await fetch(`${API_KEY}/books`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
