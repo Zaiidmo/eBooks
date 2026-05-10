@@ -5,7 +5,10 @@ import { BooksRepository } from './books.repository';
 import { Book, Borrow } from './entities/book.entity';
 import { S3ConfigService } from '@/services/s3.service';
 import { v4 as uuidv4 } from 'uuid';
-import { GetBookResponseDto, GetBooksResponseDto } from './dto/get-book-response.dto';
+import {
+  GetBookResponseDto,
+  GetBooksResponseDto,
+} from './dto/get-book-response.dto';
 
 @Injectable()
 export class BooksService {
@@ -28,7 +31,7 @@ export class BooksService {
     const createdAt = new Date().toISOString();
     const updatedAt = createdAt;
 
-    //Upload cover to S3 
+    //Upload cover to S3
     const key = `covers/${file.originalname}`;
     const coverUrl = await this.s3Service.uploadCover(file, key);
 
@@ -50,7 +53,7 @@ export class BooksService {
 
     //Save to DynamoDB
     try {
-    await this.booksRepository.create(newBook);
+      await this.booksRepository.create(newBook);
     } catch (error) {
       throw new BadRequestException('Failed to create book');
     }
@@ -61,15 +64,15 @@ export class BooksService {
     bookId: string,
     updatedFields: UpdateBookDto,
   ): Promise<void> {
-    //Validate the input fields 
-    if(updatedFields.price !== undefined && updatedFields.price < 0) {
+    //Validate the input fields
+    if (updatedFields.price !== undefined && updatedFields.price < 0) {
       throw new BadRequestException('Price must be a positive number');
     }
-    if(updatedFields.quantity !== undefined && updatedFields.quantity < 0) {
+    if (updatedFields.quantity !== undefined && updatedFields.quantity < 0) {
       throw new BadRequestException('Quantity must be a positive number');
     }
 
-    //Check if the book exists 
+    //Check if the book exists
     const book = await this.booksRepository.findById(bookId);
     if (!book) {
       throw new BadRequestException('Book not found');
@@ -85,7 +88,7 @@ export class BooksService {
     await this.booksRepository.update(bookId, updatedBook);
   }
 
-  //Delete a book by its ID 
+  //Delete a book by its ID
   async deleteBook(bookId: string): Promise<void> {
     const book = await this.booksRepository.findById(bookId);
     if (!book) {
@@ -107,10 +110,10 @@ export class BooksService {
   async getAllBooks(): Promise<GetBooksResponseDto> {
     const books = await this.booksRepository.getAllBooks();
     // console.log('books:', books);
-    
+
     return {
-      books: books.map(book => this.transformToResponseDto(book)),
-      totalBooks: books.length
+      books: books.map((book) => this.transformToResponseDto(book)),
+      totalBooks: books.length,
     };
   }
 
@@ -118,13 +121,13 @@ export class BooksService {
   async borrowBook(bookId: string, userId: string): Promise<void> {
     const book = await this.booksRepository.findById(bookId);
     if (!book) throw new BadRequestException('Book not found');
-    
+
     if (book.quantity === 0) {
       throw new BadRequestException('Book not available');
     }
 
     const hasActiveBorrow = book.borrowedBy.some(
-      b => b.userId === userId && b.status === 'ACTIVE'
+      (b) => b.userId === userId && b.status === 'ACTIVE',
     );
     if (hasActiveBorrow) {
       throw new BadRequestException('Already borrowed this book');
@@ -133,15 +136,17 @@ export class BooksService {
     const borrowRecord: Borrow = {
       userId,
       borrowDate: new Date().toISOString(),
-      expectedReturnDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
-      status: 'ACTIVE'
+      expectedReturnDate: new Date(
+        Date.now() + 14 * 24 * 60 * 60 * 1000,
+      ).toISOString(),
+      status: 'ACTIVE',
     };
 
     const updatedBook = {
       ...book,
       quantity: book.quantity - 1,
       borrowedBy: [...book.borrowedBy, borrowRecord],
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     };
 
     await this.booksRepository.update(bookId, updatedBook);
@@ -153,36 +158,38 @@ export class BooksService {
     if (!book) throw new BadRequestException('Book not found');
 
     const borrowRecord = book.borrowedBy.find(
-      b => b.userId === userId && b.status === 'ACTIVE'
+      (b) => b.userId === userId && b.status === 'ACTIVE',
     );
 
     if (!borrowRecord) {
       throw new BadRequestException('No active borrow found');
     }
 
-    const updatedBorrows = book.borrowedBy.map(b =>
+    const updatedBorrows = book.borrowedBy.map((b) =>
       b.userId === userId && b.status === 'ACTIVE'
-        ? { ...b, status: 'RETURNED' as const, actualReturnDate: new Date().toISOString() }
-        : b
+        ? {
+            ...b,
+            status: 'RETURNED' as const,
+            actualReturnDate: new Date().toISOString(),
+          }
+        : b,
     );
-    
+
     if (!borrowRecord) {
       throw new BadRequestException('No active borrow found');
     }
-
 
     const updatedBook = {
       ...book,
       quantity: book.quantity + 1,
       borrowedBy: updatedBorrows,
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     };
 
     await this.booksRepository.update(bookId, updatedBook);
   }
 
   private transformToResponseDto(book: Book): GetBookResponseDto {
-    
     return {
       id: book.book_id,
       title: book.title,

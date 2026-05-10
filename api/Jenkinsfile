@@ -5,8 +5,8 @@ pipeline {
 
     environment {
         DEPLOY_SERVER = 'ubuntu@3.124.192.157'
-        BOOKS_SERVICE_DIR = '/home/ubuntu/eBooks-API'
-        GIT_REPO = 'git@github.com:Zaiidmo/eBooks-API.git'
+        BOOKS_SERVICE_DIR = '/home/ubuntu/eBooks'
+        GIT_REPO = 'git@github.com:Zaiidmo/eBooks.git'
         WORKSPACE = "${JENKINS_HOME}/workspace/books-service-pipeline"
         NODE_OPTIONS = '--max_old_space_size=4096'  
     }
@@ -41,13 +41,13 @@ pipeline {
 
         stage('Test') {
             steps {
-                sh 'npm test'
+                sh 'npm test -w api'
             }
         }
 
         stage('Build') {
             steps {
-                sh 'npm run build'
+                sh 'npm run build -w api'
             }
         }
 
@@ -60,9 +60,9 @@ pipeline {
                                 cd ${BOOKS_SERVICE_DIR} && \
                                 GIT_SSH_COMMAND='ssh -i ~/.ssh/jenkins_github_key -o StrictHostKeyChecking=no' git pull origin master && \
                                 npm install && \
-                                npm run build && \
+                                npm run build -w api && \
                                 pm2 delete all && \
-                                pm2 start dist/src/main.js --name eBooks-API
+                                pm2 start api/dist/src/main.js --name eBooks-API
                             "
                         """
                     }

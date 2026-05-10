@@ -32,8 +32,7 @@ export class S3ConfigService {
     }
   }
 
-
-  // Delete an existing cover 
+  // Delete an existing cover
   async deleteCover(key: string): Promise<void> {
     const params = {
       Bucket: process.env.AWS_S3_BUCKET_NAME,

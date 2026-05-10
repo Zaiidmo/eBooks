@@ -76,7 +76,10 @@ describe('BooksService', () => {
 
       await booksService.createBook(createBookDto, file);
 
-      expect(s3Service.uploadCover).toHaveBeenCalledWith(file, expect.any(String));
+      expect(s3Service.uploadCover).toHaveBeenCalledWith(
+        file,
+        expect.any(String),
+      );
       expect(booksRepository.create).toHaveBeenCalledWith(
         expect.objectContaining({
           title: createBookDto.title,
@@ -144,7 +147,9 @@ describe('BooksService', () => {
       };
       booksRepository.findById.mockResolvedValue(existingBook);
 
-      await booksService.updateBook(existingBook.book_id, { title: 'Updated Title' });
+      await booksService.updateBook(existingBook.book_id, {
+        title: 'Updated Title',
+      });
 
       expect(booksRepository.update).toHaveBeenCalledWith(
         existingBook.book_id,
@@ -260,44 +265,44 @@ describe('BooksService', () => {
       expect(result.totalBooks).toBe(0);
     });
   });
-  
+
   describe('borrowBook', () => {
     it('should throw an error if the book is not found', async () => {
       booksRepository.findById.mockResolvedValue(null);
-  
-      await expect(booksService.borrowBook('invalid-id', 'user-id')).rejects.toThrow(
-        BadRequestException,
-      );
+
+      await expect(
+        booksService.borrowBook('invalid-id', 'user-id'),
+      ).rejects.toThrow(BadRequestException);
     });
-  
+
     it('should throw an error if the book is not available', async () => {
       const unavailableBook = {
         book_id: 'book-id',
         quantity: 0,
         borrowedBy: [],
       } as Book;
-  
+
       booksRepository.findById.mockResolvedValue(unavailableBook);
-  
-      await expect(booksService.borrowBook('book-id', 'user-id')).rejects.toThrow(
-        BadRequestException,
-      );
+
+      await expect(
+        booksService.borrowBook('book-id', 'user-id'),
+      ).rejects.toThrow(BadRequestException);
     });
-  
+
     it('should throw an error if the user already has an active borrow', async () => {
       const bookWithActiveBorrow = {
         book_id: 'book-id',
         quantity: 5,
         borrowedBy: [{ userId: 'user-id', status: 'ACTIVE' }],
       } as Book;
-  
+
       booksRepository.findById.mockResolvedValue(bookWithActiveBorrow);
-  
-      await expect(booksService.borrowBook('book-id', 'user-id')).rejects.toThrow(
-        BadRequestException,
-      );
+
+      await expect(
+        booksService.borrowBook('book-id', 'user-id'),
+      ).rejects.toThrow(BadRequestException);
     });
-  
+
     it('should borrow a book successfully', async () => {
       const availableBook = {
         book_id: 'book-id',
@@ -305,11 +310,11 @@ describe('BooksService', () => {
         borrowedBy: [],
         updatedAt: '',
       } as Book;
-  
+
       booksRepository.findById.mockResolvedValue(availableBook);
-  
+
       await booksService.borrowBook('book-id', 'user-id');
-  
+
       expect(booksRepository.update).toHaveBeenCalledWith(
         'book-id',
         expect.objectContaining({
@@ -321,40 +326,40 @@ describe('BooksService', () => {
       );
     });
   });
-  
+
   describe('returnBook', () => {
     it('should throw an error if the book is not found', async () => {
       booksRepository.findById.mockResolvedValue(null);
-  
-      await expect(booksService.returnBook('invalid-id', 'user-id')).rejects.toThrow(
-        BadRequestException,
-      );
+
+      await expect(
+        booksService.returnBook('invalid-id', 'user-id'),
+      ).rejects.toThrow(BadRequestException);
     });
-  
+
     it('should throw an error if no active borrow is found for the user', async () => {
       const bookWithoutActiveBorrow = {
         book_id: 'book-id',
         borrowedBy: [{ userId: 'other-user', status: 'RETURNED' }],
       } as Book;
-  
+
       booksRepository.findById.mockResolvedValue(bookWithoutActiveBorrow);
-  
-      await expect(booksService.returnBook('book-id', 'user-id')).rejects.toThrow(
-        BadRequestException,
-      );
+
+      await expect(
+        booksService.returnBook('book-id', 'user-id'),
+      ).rejects.toThrow(BadRequestException);
     });
-  
+
     it('should return a book successfully', async () => {
       const bookWithActiveBorrow = {
         book_id: 'book-id',
         quantity: 3,
         borrowedBy: [{ userId: 'user-id', status: 'ACTIVE' }],
       } as Book;
-  
+
       booksRepository.findById.mockResolvedValue(bookWithActiveBorrow);
-  
+
       await booksService.returnBook('book-id', 'user-id');
-  
+
       expect(booksRepository.update).toHaveBeenCalledWith(
         'book-id',
         expect.objectContaining({
@@ -366,5 +371,4 @@ describe('BooksService', () => {
       );
     });
   });
-  
 });

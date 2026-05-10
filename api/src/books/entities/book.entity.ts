@@ -13,7 +13,6 @@ export class Book {
   updatedAt: string;
 }
 
-
 export class Borrow {
   userId: string;
   borrowDate: string;

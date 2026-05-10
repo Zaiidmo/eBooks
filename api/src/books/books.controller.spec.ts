@@ -78,16 +78,24 @@ describe('BooksController', () => {
 
       booksService.updateBook.mockResolvedValue(undefined);
 
-      const result = await booksController.updateBook(existingBook.book_id, updateBookDto);
+      const result = await booksController.updateBook(
+        existingBook.book_id,
+        updateBookDto,
+      );
 
-      expect(booksService.updateBook).toHaveBeenCalledWith(existingBook.book_id, updateBookDto);
+      expect(booksService.updateBook).toHaveBeenCalledWith(
+        existingBook.book_id,
+        updateBookDto,
+      );
       expect(result).toEqual({ message: 'Book updated successfully' });
     });
 
     it('should throw an error if book not found', async () => {
       const updateBookDto: UpdateBookDto = { title: 'Updated Title' };
 
-      booksService.updateBook.mockRejectedValue(new BadRequestException('Book not found'));
+      booksService.updateBook.mockRejectedValue(
+        new BadRequestException('Book not found'),
+      );
 
       await expect(
         booksController.updateBook('invalid-id', updateBookDto),
@@ -108,9 +116,13 @@ describe('BooksController', () => {
 
     it('should throw an error if book not found', async () => {
       const bookId = 'invalid-id';
-      booksService.deleteBook.mockRejectedValue(new NotFoundException('Book not found'));
+      booksService.deleteBook.mockRejectedValue(
+        new NotFoundException('Book not found'),
+      );
 
-      await expect(booksController.deleteBook(bookId)).rejects.toThrowError(NotFoundException);
+      await expect(booksController.deleteBook(bookId)).rejects.toThrowError(
+        NotFoundException,
+      );
     });
   });
 
@@ -142,27 +154,34 @@ describe('BooksController', () => {
 
     it('should throw an error if book not found', async () => {
       const bookId = 'invalid-id';
-      booksService.getBookById.mockRejectedValue(new NotFoundException('Book not found'));
+      booksService.getBookById.mockRejectedValue(
+        new NotFoundException('Book not found'),
+      );
 
-      await expect(booksController.getBook(bookId)).rejects.toThrowError(NotFoundException);
+      await expect(booksController.getBook(bookId)).rejects.toThrowError(
+        NotFoundException,
+      );
     });
   });
 
   describe('getAllBooks', () => {
     it('should return all books', async () => {
-      const books: GetBooksResponseDto = { books: [
-        {
-          id: 'book-id',
-          title: 'Title 1',
-          author: 'Author 1',
-          category: 'Category 1',
-          isbn: 'isbn1',
-          quantity: 5,
-          cover: 'https://s3.amazon.com/covers/cover1.jpg',
-          description: 'Description 1',
-          price: 10.99,
-        },
-      ], totalBooks: 1 };
+      const books: GetBooksResponseDto = {
+        books: [
+          {
+            id: 'book-id',
+            title: 'Title 1',
+            author: 'Author 1',
+            category: 'Category 1',
+            isbn: 'isbn1',
+            quantity: 5,
+            cover: 'https://s3.amazon.com/covers/cover1.jpg',
+            description: 'Description 1',
+            price: 10.99,
+          },
+        ],
+        totalBooks: 1,
+      };
 
       booksService.getAllBooks.mockResolvedValue(books);
 
@@ -173,7 +192,9 @@ describe('BooksController', () => {
     });
 
     it('should handle error when fetching books', async () => {
-      booksService.getAllBooks.mockRejectedValue(new Error('Error fetching books'));
+      booksService.getAllBooks.mockRejectedValue(
+        new Error('Error fetching books'),
+      );
 
       const result = await booksController.getAllBooks();
 
@@ -198,7 +219,9 @@ describe('BooksController', () => {
       const bookId = 'book-id';
       const userId = 'user-id';
 
-      booksService.borrowBook.mockRejectedValue(new Error('Cannot borrow this book'));
+      booksService.borrowBook.mockRejectedValue(
+        new Error('Cannot borrow this book'),
+      );
 
       const result = await booksController.borrowBook(bookId, userId);
 
@@ -223,7 +246,9 @@ describe('BooksController', () => {
       const bookId = 'book-id';
       const userId = 'user-id';
 
-      booksService.returnBook.mockRejectedValue(new Error('Cannot return this book'));
+      booksService.returnBook.mockRejectedValue(
+        new Error('Cannot return this book'),
+      );
 
       const result = await booksController.returnBook(bookId, userId);
 

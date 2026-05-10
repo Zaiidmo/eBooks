@@ -106,18 +106,15 @@ src/
 
 ### Installation
 
+This service is part of the eBooks monorepo. To install dependencies, run the following from the root directory:
+
 ```bash
-git clone https://github.com/Zaiidmo/eBooks-API.git
-cd eBooks-API
 npm install
-cp .env.example .env
 ```
 
 ### Configure environment variables:
 
-```bash
-cp .env.example .env
-```
+Create a `.env` file in the `api/` directory (you can use `.env.example` as a template).
 
 Update the newly created .env file with proper variables
 
@@ -201,10 +198,9 @@ npm run test:cov
 
 ---
 
-## 🌐 Related Repository
+## 🌐 Related Workspace
 
-The corresponding **Frontend Application** (handling Cognito authentication and user interaction) is available here:  
-👉 [eBooks Frontend](https://github.com/Zaiidmo/eBooks-UI)
+The corresponding **Frontend Application** is available in the `web/` directory of this monorepo.
 
 ---
 

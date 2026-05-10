@@ -34,7 +34,7 @@ Authentication is handled with **AWS Cognito**, and all API calls are routed thr
 ## 🗂️ Project Structure
 
 ```
-eBooks-UI/
+web/
 ├─ src/
 │  ├─ api/               # API client, interceptors, typed endpoints
 │  ├─ components/        # Reusable UI components
@@ -53,7 +53,7 @@ eBooks-UI/
 
 ## ⚙️ Environment Variables
 
-Create a `.env` file at the project root based on the example below:
+Create a `.env` file in the `web/` directory based on the example below:
 
 ```bash
 cp .env.example .env

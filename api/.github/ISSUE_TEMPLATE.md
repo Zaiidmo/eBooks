@@ -1,4 +1,3 @@
-
 ## 🐛 Bug Report
 
 **Describe the bug**
@@ -6,6 +5,7 @@ A clear and concise description of the issue.
 
 **To Reproduce**
 Steps to reproduce the behavior:
+
 1. Go to '...'
 2. Run '...'
 3. See error '...'
@@ -17,6 +17,7 @@ What did you expect to happen?
 Attach logs or screenshots if applicable.
 
 **Environment**
+
 - OS: [e.g. Ubuntu 22.04]
 - Node version: [e.g. 18.16.0]
 - AWS region: [e.g. eu-west-1]

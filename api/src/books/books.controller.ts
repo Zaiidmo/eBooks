@@ -1,4 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UploadedFile, UseInterceptors, Put, NotFoundException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UploadedFile,
+  UseInterceptors,
+  Put,
+  NotFoundException,
+} from '@nestjs/common';
 import { BooksService } from './books.service';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
@@ -14,7 +26,7 @@ export class BooksController {
   @UseInterceptors(FileInterceptor('cover'))
   async createBook(
     @Body() createBookDto: CreateBookDto,
-    @UploadedFile() file: Express.Multer.File, 
+    @UploadedFile() file: Express.Multer.File,
   ) {
     try {
       await this.booksService.createBook(createBookDto, file);
@@ -29,12 +41,12 @@ export class BooksController {
   async updateBook(
     @Param('id') bookId: string,
     @Body() updateBookDto: UpdateBookDto,
-  ) : Promise<any>{
+  ): Promise<any> {
     try {
       await this.booksService.updateBook(bookId, updateBookDto);
       return { message: 'Book updated successfully' };
     } catch (error) {
-      throw error ;
+      throw error;
     }
   }
 
@@ -77,12 +89,15 @@ export class BooksController {
     }
   }
 
-  //Borrow a book 
+  //Borrow a book
   @Post(':id/borrow')
-  async borrowBook(@Param('id') bookId: string, @Body('userId') userId: string): Promise<any> {
+  async borrowBook(
+    @Param('id') bookId: string,
+    @Body('userId') userId: string,
+  ): Promise<any> {
     try {
       console.log('Borrowing book:', bookId, userId);
-      
+
       await this.booksService.borrowBook(bookId, userId);
       return { message: 'Book borrowed successfully' };
     } catch (error) {
@@ -92,7 +107,10 @@ export class BooksController {
 
   //Return a borrowed book
   @Post(':id/return')
-  async returnBook(@Param('id') bookId: string, @Body('userId') userId: string): Promise<any> {
+  async returnBook(
+    @Param('id') bookId: string,
+    @Body('userId') userId: string,
+  ): Promise<any> {
     try {
       await this.booksService.returnBook(bookId, userId);
       return { message: 'Book returned successfully' };

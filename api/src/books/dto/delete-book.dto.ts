@@ -1,3 +1,3 @@
 export class DeleteBookDto {
-    readonly book_id: string;
-  }
+  readonly book_id: string;
+}

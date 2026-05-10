@@ -1,5 +1,5 @@
 {
-  "name": "vlpha-react-app",
+  "name": "@ebooks/web",
   "private": false,
   "version": "0.0.7",
   "description": "A script to create a new React project with a custom structure by the Alpha",

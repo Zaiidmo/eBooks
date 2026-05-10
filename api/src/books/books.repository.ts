@@ -51,7 +51,7 @@ export class BooksRepository {
       borrowDate: borrowInfoItem.M.borrow_date.S,
       expectedReturnDate: borrowInfoItem.M.expectedReturnDate.S,
       actualReturnDate: borrowInfoItem.M.actualReturnDate.S,
-      status: borrowInfoItem.M.status.S
+      status: borrowInfoItem.M.status.S,
     }));
   }
 
@@ -186,15 +186,14 @@ export class BooksRepository {
 
     try {
       const result = await this.dynamoDBDocumentClient.send(
-        new ScanCommand(params)
+        new ScanCommand(params),
       );
-      
-      const books = result.Items ? 
-        result.Items.map(item => this.convertDynamoItemToBook(item)) : 
-        [];
-        // console.log('Books:', result.Items);
-        
-      
+
+      const books = result.Items
+        ? result.Items.map((item) => this.convertDynamoItemToBook(item))
+        : [];
+      // console.log('Books:', result.Items);
+
       return books;
     } catch (error) {
       console.error('Error fetching books from DynamoDB:', error);
@@ -202,19 +201,19 @@ export class BooksRepository {
     }
   }
 
- private convertDynamoItemToBook(item: Record<string, any>): Book {
-  return {
-    book_id: item.book_id.S,
-    title: item.title.S,
-    author: item.author.S,
-    isbn: item.isbn.S ,
-    category: item.category.S,
-    quantity: Number(item.quantity.S),
-    cover: item.cover.S,
-    description: item.description.S,
-    price: Number(item.price.S),
-    createdAt: item.createdAt.S,
-    updatedAt: item.updatedAt.S
-  };
-}
+  private convertDynamoItemToBook(item: Record<string, any>): Book {
+    return {
+      book_id: item.book_id.S,
+      title: item.title.S,
+      author: item.author.S,
+      isbn: item.isbn.S,
+      category: item.category.S,
+      quantity: Number(item.quantity.S),
+      cover: item.cover.S,
+      description: item.description.S,
+      price: Number(item.price.S),
+      createdAt: item.createdAt.S,
+      updatedAt: item.updatedAt.S,
+    };
+  }
 }

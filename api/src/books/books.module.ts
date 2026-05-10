@@ -7,6 +7,11 @@ import { DynamoDBConfigService } from '@/config/dynamodb.config';
 
 @Module({
   controllers: [BooksController],
-  providers: [BooksService, BooksRepository, S3ConfigService, DynamoDBConfigService],
+  providers: [
+    BooksService,
+    BooksRepository,
+    S3ConfigService,
+    DynamoDBConfigService,
+  ],
 })
 export class BooksModule {}
