@@ -1,0 +1,16 @@
+# 🔒 Security Policy — eBooks UI
+
+## Reporting
+
+If you find a vulnerability, **do not open a public issue**. Email: **vlphadev@gmail.com**
+
+## Frontend Risks
+
+- Leaked API URLs or IDs (acceptable, but no secrets)
+- Insecure token storage (prefer memory/localStorage with care)
+- CORS misconfigurations (API Gateway)
+- Dependency vulnerabilities (run `npm audit`)
+
+## Scope
+
+Security patches are applied to the latest `main` branch.

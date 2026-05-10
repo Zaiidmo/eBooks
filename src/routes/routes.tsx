@@ -1,0 +1,42 @@
+import { RouteObject } from 'react-router-dom'
+import Home from '../pages/Home'
+import { ProtectedRoute, PublicRoute } from '@/guards/auth.guard'
+import Login from '@/pages/Auth/Login'
+import Register from '@/pages/Auth/Register'
+import VerifyEmail from '@/pages/Auth/VerifyEmail'
+import Books from '@/pages/Books'
+import { Dashboard } from '@/pages/Dashboard'
+import { Profile } from '@/pages/Profile'
+
+const routes: RouteObject[] = [
+  {
+    path: '/',
+    element: <Home />,
+  },
+  { 
+    path: '/verify-email',
+    element: <PublicRoute><VerifyEmail /></PublicRoute>,
+  },
+  { 
+    path: '/login',
+    element: <PublicRoute><Login /></PublicRoute>,
+  },
+  { 
+    path: '/register',
+    element: <PublicRoute><Register /></PublicRoute>,
+  },
+  {
+    path: '/books',
+    element: <Books  />,
+  },
+  {
+    path: '/dashboard',
+    element: <ProtectedRoute><Dashboard  /></ProtectedRoute>,
+  },
+  {
+    path: '/profile',
+    element: <ProtectedRoute><Profile  /></ProtectedRoute>,
+  },
+]
+
+export default routes
