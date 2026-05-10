@@ -1,0 +1,20 @@
+# CODEOWNERS
+
+# This file defines ownership of the repository for code review and contribution management.
+
+# Owners are automatically requested for review when someone opens a pull request that modifies code they own.
+
+# Primary owner — TheVlpha
+
+- @zaiidmo
+
+# Specific ownership by directory (optional but organized)
+
+src/books/ @zaiidmo
+src/config/ @zaiidmo
+test/ @zaiidmo
+
+# Documentation and community files
+
+\*.md @zaiidmo
+.github/ @zaiidmo

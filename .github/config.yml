@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Project Discussions
+    url: https://github.com/Zaiidmo/eBooks-API/discussions
+    about: Ask questions or discuss ideas
+  - name: 👤 Contact the maintainer
+    url: https://github.com/Zaiidmo
+    about: Reach out to the maintainer directly
+  - name: Email the maintainer
+    url: mailto:vlphadev@gmail.com
+    about: Private contact via email
