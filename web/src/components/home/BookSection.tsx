@@ -6,7 +6,7 @@ interface Book {
   title: string;
   author: string;
   cover: string;
-  isbn: string;
+  isbn?: string;
   category: string;
   quantity: number;
   price: number;
