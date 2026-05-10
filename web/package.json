@@ -87,5 +87,8 @@
     "rollup": "^4.27.0",
     "webpack": "^5.97.1",
     "webpack-cli": "^5.1.4"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "^4.27.0"
   }
 }
