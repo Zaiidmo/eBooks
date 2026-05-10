@@ -1,10 +1,16 @@
 import { Book } from "@/types";
+import { IS_DEMO_MODE, MOCK_BOOKS } from "@/constants/demoData";
 
 const API_GATEWAY_URL = import.meta.env.VITE_AWS_API_GATEWAY_URL;
 
 export const getAllBooks = async ():Promise<Book[]> => {
-  try {
+  if (IS_DEMO_MODE) {
+    // Simulate network delay for a more realistic demo experience
+    await new Promise(resolve => setTimeout(resolve, 800));
+    return MOCK_BOOKS;
+  }
 
+  try {
     const response = await fetch(`${API_GATEWAY_URL}/books`, {
       method: 'GET',
       headers: {

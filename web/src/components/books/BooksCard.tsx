@@ -17,6 +17,7 @@ import {
   QrCode,
 } from "lucide-react";
 import { GlassModal } from "../modals/GlassModal";
+import { checkDemoMode } from "@/utils/demoUtils";
 
 interface BookCardProps {
   book: Book;
@@ -31,6 +32,17 @@ export function BookCard({
   onReturn,
   isLibrarian,
 }: BookCardProps) {
+  
+  const handleBorrow = () => {
+    if (checkDemoMode()) return;
+    onBorrow?.(book.book_id);
+  };
+
+  const handleReturn = () => {
+    if (checkDemoMode()) return;
+    onReturn?.(book.book_id);
+  };
+
   return (
     <Card className="h-full bg-gradient-to-b from-white to-black/20 dark:from-gray-800/80 dark:to-gray-800/50 flex flex-col">
       <CardHeader>
@@ -51,7 +63,7 @@ export function BookCard({
       </CardContent>
       <CardFooter className="flex justify-end items-center">
         {isLibrarian ? (
-          <Button variant="outline" onClick={() => onReturn?.(book.book_id)}>
+          <Button variant="outline" onClick={handleReturn}>
             Return
           </Button>
         ) : (
@@ -131,7 +143,7 @@ export function BookCard({
                 </div>
                 <Button
                   className="mt-4 tracking-widest font-bold uppercase"
-                  onClick={() => onBorrow?.(book.book_id)}
+                  onClick={handleBorrow}
                 >
                   {" "}
                   <Pointer /> Borrow{" "}

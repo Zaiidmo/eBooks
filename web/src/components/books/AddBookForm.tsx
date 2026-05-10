@@ -7,6 +7,7 @@ import { createNewBook } from "@/services/books/createBook";
 import { useNavigate } from "react-router-dom";
 import { toastNotifier } from "@/utils/toastNotifier";
 import { BookFormData } from "@/types";
+import { checkDemoMode } from "@/utils/demoUtils";
 
 
 export function AddBookForm() {
@@ -19,6 +20,7 @@ export function AddBookForm() {
   const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<BookFormData> = async (data) => {
+    if (checkDemoMode()) return;
     setIsSubmitting(true);
     const formData = new FormData();
     
@@ -191,6 +193,3 @@ export function AddBookForm() {
     </form>
   );
 }
-
-
-

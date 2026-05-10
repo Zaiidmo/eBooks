@@ -17,6 +17,7 @@ import { toastNotifier } from "@/utils/toastNotifier";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loginUser } from "@/services/auth/login";
+import { checkDemoMode } from "@/utils/demoUtils";
 
 // Define validation schema using Zod
 const loginSchema = z.object({
@@ -42,6 +43,7 @@ export default function LoginForm() {
 
   // Handle form submission
   const onLoginSubmit = async (values: z.infer<typeof loginSchema>) => {
+    if (checkDemoMode()) return;
     try {
       setLoading(true);
       // Call the login service to authenticate the user

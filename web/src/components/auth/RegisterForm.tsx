@@ -16,6 +16,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { toastNotifier } from "@/utils/toastNotifier";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "@/services/auth/register";
+import { checkDemoMode } from "@/utils/demoUtils";
 
 const formSchema = z
   .object({
@@ -50,6 +51,7 @@ export default function RegisterForm() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (checkDemoMode()) return;
     setLoading(true);
     toastNotifier({
       message: "Processing your registration...",
