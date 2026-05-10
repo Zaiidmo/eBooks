@@ -1,6 +1,9 @@
 {
   "name": "ebooks-monorepo",
   "private": true,
+  "engines": {
+    "node": "20.x"
+  },
   "workspaces": [
     "web",
     "api",
